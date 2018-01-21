@@ -18,35 +18,45 @@ def findDiscription(information):
 def findImages(information):
     yield [re.findall('url\(\"(.{2,})\"\)',x['style']) for x in information.findAll('div',{'class',re.compile("backgroundImage")})]
 def main():
-    for n in range(1,5):  
-        url='https://www.kijiji.ca/b-st-catharines/niagara-fall-room/page-'+str(n)+'/k0l80016?dc=true'
+    for n in range(1,6):  
+        # https://www.kijiji.ca/b-real-estate/st-catharines/houses-for-sale-niagara-falls-on/k0c34l80016?origin=rs
+
+        # https://www.kijiji.ca/b-house-for-sale/ontario/brampton/page-18/k0c35l9004
+        url='https://www.kijiji.ca/b-house-for-sale/ontario/brampton/page-'+str(n)+'/k0c35l9004'
         response = urllib2.urlopen(url)
         soup = BeautifulSoup(response, 'html.parser')
         #getting all the links----------
         for n in soup.find_all('a',attrs={'class':'enable-search-navigation-flag'}, href=True):  
-            adds_list.append((n.text.strip(),n['href']))
+            adds_list.append((n.text.strip(),n['href']))            
         for key, val in adds_list:    
-            # items.append({'url':re.sub('(/b-st-catharines.{0,})',val,url)})
             items.append({'url':'https://www.kijiji.ca'+val})
+    print('Links fatched')
 
-def addInformation():    
-    for val in items:    
-        request = urllib2.urlopen(val['url'])    
-        soup2 = BeautifulSoup(request, 'html.parser')
-        # print([(x[0].find('span')) for x in findPrice(soup2)])
-        val['price']=[x[0].text if x[0].find('span')!=-1 else 'Price not present' for x in findPrice(soup2)][0]
-        val['address']= [x.text for x in findAddress(soup2)][0]
-        # # val['discription']= [x[1].text for x in findDiscription(soup2)][0]
-        val['images']= [x for x in findImages(soup2)][0] 
-        val['date']=findDate(soup2)   
-    try:
-        with open('C:/Users/shubh/Downloads/Python Kijiji/pythonScraping/rented_data/file.csv', "w", newline='') as csv_file:
+def info(val1):
+    request = urllib2.urlopen(val1['url'])    
+    soup2 = BeautifulSoup(request, 'html.parser')
+    # print([(x[0].find('span')) for x in findPrice(soup2)])
+    val1['price']=[x[0].text if x[0].find('span')!=-1 else 'Price not present' for x in findPrice(soup2)][0]
+    val1['address']= [x.text for x in findAddress(soup2)][0]
+    # # val1['discription']= [x[1].text for x in findDiscription(soup2)][0]
+    val1['images']= [x for x in findImages(soup2)][0] 
+    val1['date']=findDate(soup2) 
+    return val1
+    
+def addInformation():
+     # print(items) 
+    with open('C:/Users/shubh/Downloads/Python Kijiji/pythonScraping/house/brampton.csv', "w", newline='') as csv_file:         
+        for key,val in enumerate(items):
+            val=info(val)
+            if(key==0):                
                 writer = csv.DictWriter(csv_file, fieldnames = [n for n in val.keys()])         
-                writer.writeheader()   
-                for val in items:     
-                    writer.writerows([val])
-    except:
-        print("error")
+                writer.writeheader()  
+            writer.writerows([val])   
+                          
+                        
+            # writer = csv.DictWriter(csv_file, fieldnames = [n for n in info(val).keys()])         
+            # writer.writeheader()          
+            # writer.writerows([info(val)])  
 main()
 addInformation()
 # print(items)
