@@ -41,7 +41,7 @@ def addInformation():
         val['date']=findDate(soup2)   
     try:
 
-        with open('C:/Users/shubh/Downloads/Data/niagaraFallRooms.csv', "w", newline='') as csv_file:
+        with open('C:/Users/shubh/Downloads/rented data/niagaraFallRooms.csv', "w", newline='') as csv_file:
                 writer = csv.DictWriter(csv_file, fieldnames = [n for n in val.keys()])         
                 writer.writeheader()   
                 for val in items:     
