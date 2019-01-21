@@ -83,28 +83,26 @@ def addInformation(fileName,items):
         val['address']= [x.text for x in findAddress(soup2)][0]
         val['discription']= [x[1].text for x in findDiscription(soup2)][0]
         val['images']= [x for x in findImages(soup2)][0] 
-        val['date']=findDate(soup2)   
-    try:
-        with open('C:/Users/shubh/Desktop/working/'+fileName+'.csv', "w", newline='') as csv_file: 
-            writer = csv.DictWriter(csv_file, fieldnames = [n for n in val.keys()])                    
-            writer.writeheader()
-            writer.writerows([val])                    
-    except:
-        print("error")
+        val['date']=findDate(soup2) 
+    with open('C:/Users/Skumar/Desktop/working/'+fileName+'.csv', "w", newline='',encoding="utf-8") as csv_file: 
+        writer = csv.DictWriter(csv_file, fieldnames = [n for n in val.keys()])                    
+        writer.writeheader()
+        for val in items:
+            writer.writerows([val])
+
+        
+# len(items)
+# listOfUrl=[]
+# for k in items:
+#     print(k["url"])
+#     listOfUrl.append(k["url"])
+
+# len(listOfUrl)
+# with open('data.json', 'w') as outfile:
+#     json.dump(items, outfile)
+
 
 items=main(url1)
-len(items)
-listOfUrl=[]
-for k in items:
-    print(k["url"])
-    listOfUrl.append(k["url"])
-
-len(listOfUrl)
-with open('data.json', 'w') as outfile:
-    json.dump(items, outfile)
-
-
-
 addInformation("Short term Room",items)
 # print(items)
 # request = urllib2.urlopen(items[0]['url'])    
