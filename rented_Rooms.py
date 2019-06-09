@@ -5,10 +5,8 @@ import csv
 import os
 import pprint
 import json
-# adds_list=[]
-# items=[]
 
-
+savePath ="./"
 url1="https://www.kijiji.ca/b-short-term-rental/st-catharines/page-1/c42l80016"
 regex = r"(page-.)"
 # line = re.sub(regex, "page-"+str(1), url)
@@ -35,7 +33,7 @@ def findAddress(information):
 def findDiscription(information):
     yield [x for x in information.find('div',{'class',re.compile("descriptionContainer")}).children]
 def findImages(information):
-    yield [re.findall('url\(\"(.{2,})\"\)',x['style']) for x in information.findAll('div',{'class',re.compile("backgroundImage")})]
+   yield [re.findall('url\(\"(.{2,})\"\)',x['style']) for x in information.findAll('div',{'class',re.compile("backgroundImage")})]
 
 
 
@@ -84,13 +82,14 @@ def addInformation(fileName,items):
         val['discription']= [x[1].text for x in findDiscription(soup2)][0]
         val['images']= [x for x in findImages(soup2)][0] 
         val['date']=findDate(soup2) 
-    with open('C:/Users/Skumar/Desktop/working/'+fileName+'.csv', "w", newline='',encoding="utf-8") as csv_file: 
+    with open(savePath+fileName+'.csv', "w", newline='',encoding="utf-8") as csv_file: 
         writer = csv.DictWriter(csv_file, fieldnames = [n for n in val.keys()])                    
         writer.writeheader()
         for val in items:
             writer.writerows([val])
 
         
+
 # len(items)
 # listOfUrl=[]
 # for k in items:
@@ -103,7 +102,10 @@ def addInformation(fileName,items):
 
 
 items=main(url1)
+
 addInformation("Short term Room",items)
+
+
 # print(items)
 # request = urllib2.urlopen(items[0]['url'])    
 # soup2 = BeautifulSoup(request, 'html.parser')

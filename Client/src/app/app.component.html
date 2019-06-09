@@ -1,0 +1,18 @@
+<h1>
+
+</h1>
+<div class="container">
+  <form #rentHomes="ngForm" class="example-form">
+
+  <label for="basic-url">Kijiji URL {{url}}
+    </label>
+  <div class="input-group mb-3">
+    <div class="input-group-prepend">
+      <span class="input-group-text" id="basic-addon3">URL:</span>
+    </div>
+    <input type="text" class="form-control"  [(ngModel)]="url" required name="url" aria-describedby="basic-addon3">
+  </div>
+
+</form>
+  <!-- Content here -->
+</div>
