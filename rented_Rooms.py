@@ -40,7 +40,6 @@ def findImages(information):
 def main(mainurl):
     items=[]   
     adds_list=[]
-    reg=r"/page.*" 
     request = urllib2.urlopen(mainurl)    
     soup2 = BeautifulSoup(request, 'html.parser')
     totalAds=soup2.find('div',class_='showing').text
@@ -49,7 +48,7 @@ def main(mainurl):
     numberOfPages=round(int(preTotal)/20)
     if numberOfPages<5:
         numberOfPages=numberOfPages+1
-    for n in range(1,numberOfPages+1):  
+    for n in range(1,2):  
         # url='https://www.kijiji.ca/b-st-catharines/niagara-fall-room/page-'+str(n)+'/k0l80016?dc=true'
         url = re.sub(regex, "page-"+str(n), mainurl)
         print(url)
@@ -71,7 +70,7 @@ def main(mainurl):
 # m = numpy.array(items)
 # print (m.shape)
 
-def addInformation(fileName,items):
+def addInformation(items):
     for val in items:  
         # print(val)  
         request = urllib2.urlopen(val['url'])    
@@ -81,53 +80,16 @@ def addInformation(fileName,items):
         val['address']= [x.text for x in findAddress(soup2)][0]
         val['discription']= [x[1].text for x in findDiscription(soup2)][0]
         val['images']= [x for x in findImages(soup2)][0] 
-        val['date']=findDate(soup2) 
+        val['date']=findDate(soup2)
+    return items
+
+def saveCSV(fileName,items):
     with open(savePath+fileName+'.csv', "w", newline='',encoding="utf-8") as csv_file: 
-        writer = csv.DictWriter(csv_file, fieldnames = [n for n in val.keys()])                    
+        writer = csv.DictWriter(csv_file, fieldnames = [n for n in items[1].keys()])                    
         writer.writeheader()
         for val in items:
             writer.writerows([val])
-
         
+# items = main(url1)
+# na = addInformation(items)
 
-# len(items)
-# listOfUrl=[]
-# for k in items:
-#     print(k["url"])
-#     listOfUrl.append(k["url"])
-
-# len(listOfUrl)
-# with open('data.json', 'w') as outfile:
-#     json.dump(items, outfile)
-
-
-items=main(url1)
-
-addInformation("Short term Room",items)
-
-
-# print(items)
-# request = urllib2.urlopen(items[0]['url'])    
-# soup2 = BeautifulSoup(request, 'html.parser')
-# items[0]['price']=[x[0].text for x in findPrice(soup2)][0]
-# items[0]['address']= [x.text for x in findAddress(soup2)][0]
-# # items[0]['discription']= [x[1].text for x in findDiscription(soup2)][0]
-# items[0]['images']= [x for x in findImages(soup2)][0]
-# print(items[0].keys())
-
-
-#main---------------------------------------------
-
-
-
-#--------------------------------------------------------------
-# c:/Users/Administrator/Downloads/s.py
-    #findValues(soup2)
-    
-#request = urllib2.urlopen(newUrl)
-#soup2 = BeautifulSoup(request, 'html.parser')
-#print(soup2.find_all('span'))
-
-
-
-    
