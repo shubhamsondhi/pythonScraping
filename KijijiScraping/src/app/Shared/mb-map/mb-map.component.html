@@ -1,0 +1,48 @@
+<agm-map
+  [latitude]="lat"
+  [longitude]="lng"
+  [zoom]="zoom"
+  [disableDefaultUI]="false"
+  [zoomControl]="false"
+>
+  <agm-marker
+    *ngFor="let m of changedMarkers; let i = index"
+    [latitude]="m.lat"
+    [longitude]="m.lng"
+    [label]="m.price"
+    [title]="m.date"
+    [markerDraggable]="m.draggable"
+  >
+    <agm-info-window maxWidth="400">
+      <ul class="list-group text-left ">
+        <li class="list-group-item">
+          <strong>Date: {{ m.date }}</strong>
+        </li>
+        <li class="list-group-item">
+          <strong>Price: {{ m.price }}</strong>
+        </li>
+        <li class="list-group-item">Address: {{ m.address }}</li>
+
+        <li class="list-group-item">
+          Url of ad: <a target="_blank" [href]="m.url"> Kijiji Url</a>
+        </li>
+        <li class="list-group-item">Description: {{ m.des }}</li>
+      </ul>
+    </agm-info-window>
+  </agm-marker>
+
+  <!-- <agm-circle [latitude]="lat + 0.3" [longitude]="lng"
+      [radius]="5000"
+      [fillColor]="'red'"
+      [circleDraggable]="true"
+      [editable]="true">
+  </agm-circle> -->
+</agm-map>
+
+<ng5-slider
+  [(value)]="minMaxValue[0]"
+  [(highValue)]="minMaxValue[1]"
+  [options]="options"
+  (userChangeEnd)="onSliderChanged()"
+></ng5-slider>
+<button mat-raised-button color="primary" (click)="restMarker()"> Reset Markers</button>
