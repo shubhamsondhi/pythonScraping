@@ -9,7 +9,7 @@ temp.html
 *.csv
 # C extensions
 *.so
-*.json
+# *.json
 
 # Distribution / packaging
 .Python
@@ -56,7 +56,7 @@ coverage.xml
 *.pot
 
 # Django stuff:
-*.log
+# *.log
 local_settings.py
 
 # Flask stuff:
