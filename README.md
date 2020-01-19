@@ -1,11 +1,16 @@
 # pythonScraping
-Get all the data about rented rooms.
 
-This project was generated with Python
+## Introduction
+Get all the data about rented rooms on Kijiji.
+
+This project was generated with Python.
+
+## Dependancy File
+./pythonDep.txt
 
 ## Development server
 
-Run `server.py` for a dev server. Navigate to `http://localhost:5001/`.
+Run `app.py` for a dev server. Navigate to `http://localhost:5001/`.
 
 ## PY Packages 
  re

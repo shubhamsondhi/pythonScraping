@@ -35,6 +35,19 @@ def findDiscription(information):
 def findImages(information):
    yield [re.findall('url\(\"(.{2,})\"\)',x['style']) for x in information.findAll('div',{'class',re.compile("backgroundImage")})]
 
+#'\n    Showing 21 - 40 of 1,058 results' to int-> 1058
+def stringToNumbers(totalAds):
+    preTotal=re.sub(r".* of ","",totalAds)
+    preTotal=re.sub(r" Ads.*","",preTotal)
+    preTotal=re.sub(r"[A-Z]|[a-z]","",preTotal)
+    preTotal=re.sub(",","",preTotal)
+    preTotal=re.sub(r"\s","",preTotal)
+    return preTotal
+
+def GetTotalAdvertisments(soup2):
+    totalAds=soup2.find('div',class_='showing').text
+    preTotal=stringToNumbers(totalAds)
+    return preTotal
 
 
 def main(mainurl):
@@ -42,13 +55,11 @@ def main(mainurl):
     adds_list=[]
     request = urllib2.urlopen(mainurl)    
     soup2 = BeautifulSoup(request, 'html.parser')
-    totalAds=soup2.find('div',class_='showing').text
-    preTotal=re.sub(r".* of "," ",totalAds)
-    preTotal=re.sub(r" Ads.*"," ",preTotal)
+    preTotal=GetTotalAdvertisments(soup2)
     numberOfPages=round(int(preTotal)/20)
     if numberOfPages<5:
         numberOfPages=numberOfPages+1
-    for n in range(1,2):  
+    for n in range(1,3):  
         # url='https://www.kijiji.ca/b-st-catharines/niagara-fall-room/page-'+str(n)+'/k0l80016?dc=true'
         url = re.sub(regex, "page-"+str(n), mainurl)
         print(url)
@@ -57,7 +68,7 @@ def main(mainurl):
         soup = BeautifulSoup(response, 'html.parser')
 
         #getting all the links----------
-        for n in soup.find_all('a',class_='enable-search-navigation-flag', href=True):
+        for n in soup.find_all('a',class_='title', href=True):
             if(n is not None):  
                 adds_list.append((n.text.strip(),n['href']))
     for key, val in adds_list:

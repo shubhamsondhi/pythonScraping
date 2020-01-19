@@ -12,7 +12,7 @@ export class RentedHousesService {
   constructor(private http: HttpClient) {}
 
   apiKey = 'AIzaSyC3u1VAIs0S5Ij-HmcxrTEMIx19X8UZH30';
-  pyScraping = `http://127.0.0.1:5002/rentedHouses`;
+  pyScraping = `http://127.0.0.1:5000/rentedHouses`;
 
   getHouses(url: any) {
     return this.http
