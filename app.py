@@ -1,16 +1,16 @@
 import rented_Rooms as rRooms
 import re
-from flask import Flask, jsonify
-from flask_restful import Api, Resource, reqparse
+from flask import Flask,jsonify , json, request, g, abort
+# from jwt import decode, exceptions
 from flask_cors import CORS
 
-post_parser = reqparse.RequestParser()
-post_parser.add_argument('url')
+# post_parser = reqparse.RequestParser()
+# post_parser.add_argument('url')
 kijijiUrl = re.compile(r"https://www.kijiji.ca/.*")
 
 app = Flask(__name__)
 CORS(app)
-api = Api(app)
+# api = Api(app)
 
 savePath ="./"
 # url1="https://www.kijiji.ca/b-short-term-rental/st-catharines/page-1/c42l80016"
@@ -20,22 +20,54 @@ regex = r"(page-.)"
 # rRooms.addInformation("Short term Room",items)
 
 
-class RentedHouses(Resource):
-    def post(self):
-        urlObject = post_parser.parse_args()
-        print(urlObject)
-        url= urlObject['url']
-        print(kijijiUrl.match(url))
-        if kijijiUrl.match(url):
-            items = rRooms.main(url)
-            result = rRooms.addInformation(items)
-            print("done")
-            return result, 201
-        else:
-            return "Please enter the correct result",500
+@app.route('/rentedHouses', methods=['POST'])
+def rentedHouses():
+    urlObject = json.loads(request.data.decode())
+    print(urlObject)
+    url= urlObject['url']
+    print(kijijiUrl.match(url))
+    if kijijiUrl.match(url):
+        items = rRooms.main(url)
+        result = rRooms.getInformation(items)
+        print("done")
+        return jsonify(result),201
+    else:
+        return "Please enter the correct result",500
+
+@app.route('/getTotalPages', methods=['POST'])
+def getNumberPages():
+    urlObject = json.loads(request.data.decode())
+    print(urlObject)
+    url= urlObject['url']
+    print(kijijiUrl.match(url))
+    if kijijiUrl.match(url):
+        pages={}  
+        pages["totalAds"] = rRooms.GetTotalAdvertisments(url)
+        pages["totalPages"] = rRooms.getNumberOfPages(pages["totalAds"])
+        pages["listOfpageUrls"] =rRooms.createPageUrls(pages["totalPages"],url)
+
+        # result = rRooms.getInformation(totalPages)
+        print("done")
+        return jsonify(pages),201
+    else:
+        return "Please enter the correct result",500
+
+@app.route('/getItemsInfoByPage', methods=['POST'])
+def getItemsInfoByPage():
+    urlObject = json.loads(request.data.decode())
+    print(urlObject)
+    url= urlObject['url']
+    print(kijijiUrl.match(url))
+    if kijijiUrl.match(url):
+        items = rRooms.GetAdsListBYPages(url)
+        result = rRooms.getInformation(items)
+        print("done")
+        return jsonify(result),201
+    else:
+        return "Please enter the correct result",500
 
 
-api.add_resource(RentedHouses, '/rentedHouses') # Route_1
+# api.add_resource(RentedHouses, '/rentedHouses') # Route_1
 # api.add_resource(Tracks, '/tracks') # Route_2
 # api.add_resource(Employees_Name, '/employees/<employee_id>') # Route_3
 

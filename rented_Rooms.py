@@ -33,7 +33,7 @@ def findAddress(information):
 def findDiscription(information):
     yield [x for x in information.find('div',{'class',re.compile("descriptionContainer")}).children]
 def findImages(information):
-   yield [re.findall('url\(\"(.{2,})\"\)',x['style']) for x in information.findAll('div',{'class',re.compile("backgroundImage")})]
+    yield [re.findall('url\(\"(.{2,})\"\)',x['style']) for x in information.findAll('div',{'class',re.compile("backgroundImage")})]
 
 #'\n    Showing 21 - 40 of 1,058 results' to int-> 1058
 def stringToNumbers(totalAds):
@@ -44,44 +44,56 @@ def stringToNumbers(totalAds):
     preTotal=re.sub(r"\s","",preTotal)
     return preTotal
 
-def GetTotalAdvertisments(soup2):
+def GetTotalAdvertisments(mainurl):    
+    request = urllib2.urlopen(mainurl)    
+    soup2 = BeautifulSoup(request, 'html.parser')
     totalAds=soup2.find('div',class_='showing').text
     preTotal=stringToNumbers(totalAds)
     return preTotal
 
 
 def main(mainurl):
-    items=[]   
-    adds_list=[]
-    request = urllib2.urlopen(mainurl)    
-    soup2 = BeautifulSoup(request, 'html.parser')
-    preTotal=GetTotalAdvertisments(soup2)
+    preTotal=GetTotalAdvertisments(mainurl)
+    numberOfPages = getNumberOfPages(preTotal)
+    pageUrl_list = createPageUrls(numberOfPages, mainurl)
+    print(pageUrl_list)
+    items = GetAdsListBYPages(pageUrl_list)
+    return items
+
+def getNumberOfPages(preTotal):
     numberOfPages=round(int(preTotal)/20)
     if numberOfPages<5:
         numberOfPages=numberOfPages+1
-    for n in range(1,3):  
+    return numberOfPages
+
+def createPageUrls(numberOfPages,mainurl): 
+    pageUrl_list=[] 
+    for n in range(1,numberOfPages):  
         # url='https://www.kijiji.ca/b-st-catharines/niagara-fall-room/page-'+str(n)+'/k0l80016?dc=true'
-        url = re.sub(regex, "page-"+str(n), mainurl)
-        print(url)
-        print(n)
-        response = urllib2.urlopen(url)
-        soup = BeautifulSoup(response, 'html.parser')
+        page_url = re.sub(regex, "page-"+str(n), mainurl)
+        pageUrl_list.append(page_url)
+    return pageUrl_list
 
-        #getting all the links----------
-        for n in soup.find_all('a',class_='title', href=True):
-            if(n is not None):  
-                adds_list.append((n.text.strip(),n['href']))
-    for key, val in adds_list:
-        items.append({'url':"https://www.kijiji.ca"+val})
+def GetAdsListBYPages(pageUrl_list):       
+    adds_list=[]
+    items=[]
+    response = urllib2.urlopen(pageUrl_list)
+    soup = BeautifulSoup(response, 'html.parser')
+    #getting all the links----------
+    for ad in soup.find_all('a',class_='title', href=True):
+        if(ad is not None):
+            adds_list.append((ad.text.strip(),ad['href']))
+    for  val in adds_list:
+        items.append({'url':"https://www.kijiji.ca"+val[1]})
     return items
-
+    
 # bnsa= main(1,2,url)
 # bnsa[0]
 
 # m = numpy.array(items)
 # print (m.shape)
 
-def addInformation(items):
+def getInformation(items):
     for val in items:  
         # print(val)  
         request = urllib2.urlopen(val['url'])    

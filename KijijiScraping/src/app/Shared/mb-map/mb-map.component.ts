@@ -49,7 +49,7 @@ export class MbMapComponent implements OnInit, OnChanges {
             const addressObs = this.data.map(x =>
                 this.mb.getLatLong(x.address)
             );
-
+            this.minMaxValue = this.getMinMaxPrice(this.markers);
             forkJoin(addressObs).subscribe(res => {
                 res.forEach((v, i) => {
                     if (v.status === 'OK' && v.results) {
@@ -57,19 +57,19 @@ export class MbMapComponent implements OnInit, OnChanges {
                         this.markers.push(mar);
                     }
                 });
-                localStorage.setItem(
-                    'dataSource',
-                    JSON.stringify(this.markers)
-                );
+                this.restMarker();
+
+                // localStorage.setItem(
+                //     'dataSource',
+                //     JSON.stringify(this.markers)
+                // );
             });
         } else {
             console.log('this.markers', this.markers);
-            if (localStorage.getItem('dataSource') !== null) {
-                this.markers = JSON.parse(localStorage.getItem('dataSource'));
-            }
+            // if (localStorage.getItem('dataSource') !== null) {
+            //     // this.markers = JSON.parse(localStorage.getItem('dataSource'));
+            // }
         }
-
-        this.restMarker();
     }
 
     private mapResultToMarker(v: Geocode, i: number): Marker {
