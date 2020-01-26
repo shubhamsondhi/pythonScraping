@@ -30,6 +30,7 @@ def findPrice(information):
     # yield [x for x in information.find('span',{'class',re.compile("currentPrice")})]
 def findAddress(information):
     yield information.find('span',{'class',re.compile("address")})
+
 def findDiscription(information):
     yield [x for x in information.find('div',{'class',re.compile("descriptionContainer")}).children]
 def findImages(information):
@@ -44,7 +45,7 @@ def stringToNumbers(totalAds):
     preTotal=re.sub(r"\s","",preTotal)
     return preTotal
 
-def GetTotalAdvertisments(mainurl):    
+def GetTotalNumbersOfPages(mainurl):    
     request = urllib2.urlopen(mainurl)    
     soup2 = BeautifulSoup(request, 'html.parser')
     totalAds=soup2.find('div',class_='showing').text
@@ -53,14 +54,14 @@ def GetTotalAdvertisments(mainurl):
 
 
 def main(mainurl):
-    preTotal=GetTotalAdvertisments(mainurl)
-    numberOfPages = getNumberOfPages(preTotal)
+    preTotal=GetTotalNumbersOfPages(mainurl)
+    numberOfPages = convertStringToInt(preTotal)
     pageUrl_list = createPageUrls(numberOfPages, mainurl)
     print(pageUrl_list)
     items = GetAdsListBYPages(pageUrl_list)
     return items
 
-def getNumberOfPages(preTotal):
+def convertStringToInt(preTotal):
     numberOfPages=round(int(preTotal)/20)
     if numberOfPages<5:
         numberOfPages=numberOfPages+1
@@ -75,16 +76,21 @@ def createPageUrls(numberOfPages,mainurl):
     return pageUrl_list
 
 def GetAdsListBYPages(pageUrl_list):       
-    adds_list=[]
+    adds_list={}
     items=[]
     response = urllib2.urlopen(pageUrl_list)
     soup = BeautifulSoup(response, 'html.parser')
     #getting all the links----------
-    for ad in soup.find_all('a',class_='title', href=True):
+    for ad in soup.find_all('div',class_='regular-ad'):
         if(ad is not None):
-            adds_list.append((ad.text.strip(),ad['href']))
-    for  val in adds_list:
-        items.append({'url':"https://www.kijiji.ca"+val[1]})
+            adds_list['dataId'] = ad.attrs['data-listing-id']
+            adds_list['url'] = "https://www.kijiji.ca"+ad.attrs['data-vip-url']
+            title = ad.find('a',class_='title')
+            adds_list['title'] = title.contents[0]
+            dataPosted = ad.find('span',class_='date-posted')
+            adds_list['dataPosted'] = dataPosted.contents[0]    
+            items.append(adds_list)
+            adds_list={}    
     return items
     
 # bnsa= main(1,2,url)

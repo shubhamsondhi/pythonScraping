@@ -42,8 +42,8 @@ def getNumberPages():
     print(kijijiUrl.match(url))
     if kijijiUrl.match(url):
         pages={}  
-        pages["totalAds"] = rRooms.GetTotalAdvertisments(url)
-        pages["totalPages"] = rRooms.getNumberOfPages(pages["totalAds"])
+        pages["totalAds"] = rRooms.GetTotalNumbersOfPages(url)
+        pages["totalPages"] = rRooms.convertStringToInt(pages["totalAds"])
         pages["listOfpageUrls"] =rRooms.createPageUrls(pages["totalPages"],url)
 
         # result = rRooms.getInformation(totalPages)
