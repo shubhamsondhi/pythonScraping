@@ -8,12 +8,13 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { SharedModule } from '../Shared/shared.module';
 @NgModule({
     imports: [CommonModule,
-      SharedModule,
       BrowserModule,
       FormsModule,
       MatProgressBarModule,
       MatButtonModule,
-      BrowserAnimationsModule],
+      BrowserAnimationsModule,
+      SharedModule
+    ],
     exports: [HomeComponent],
     declarations: [HomeComponent],
 })

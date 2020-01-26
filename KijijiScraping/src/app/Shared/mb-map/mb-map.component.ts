@@ -23,6 +23,7 @@ export class MbMapComponent implements OnInit, OnChanges {
     longitude = -147.20785;
     mapType = 'satellite';
     minMaxValue = [0, 100];
+
     // google maps zoom level
     zoom = 8;
 
@@ -72,16 +73,23 @@ export class MbMapComponent implements OnInit, OnChanges {
             // }
         }
     }
-
+    getLabelOption(price: string) {
+        return {
+            color: 'black',
+            fontFamily: '',
+            fontSize: '14px',
+            fontWeight: 'bold',
+            text: price,
+        };
+    }
     clickedMap(event) {
-        console.log(event);
         if (this.previous) {
             this.previous.close();
+            this.previous = undefined;
         }
     }
 
     clickedMarker(label: string, infoWindow, marker, index: number) {
-        console.log('infoWindow', infoWindow);
         if (this.previous && this.previous !== infoWindow) {
             this.previous.close();
         }
@@ -97,6 +105,7 @@ export class MbMapComponent implements OnInit, OnChanges {
 
         mar.title = this.data[i].title;
         mar.imagesUrl = this.data[i].images;
+        mar.date = this.data[i].date;
         mar.price = this.data[i].price;
         mar.url = this.data[i].url;
         mar.address = this.data[i].address;

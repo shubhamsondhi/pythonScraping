@@ -88,7 +88,8 @@ def GetAdsListBYPages(pageUrl_list):
             title = ad.find('a',class_='title')
             adds_list['title'] = title.contents[0]
             dataPosted = ad.find('span',class_='date-posted')
-            adds_list['dataPosted'] = dataPosted.contents[0]    
+            if(dataPosted is not None):
+                adds_list['dataPosted'] = dataPosted.contents[0]    
             items.append(adds_list)
             adds_list={}    
     return items
