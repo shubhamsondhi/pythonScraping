@@ -33,6 +33,7 @@ export class MbMapComponent implements OnInit, OnChanges {
     markers: Marker[] = [];
     changedMarkers: Marker[] = [];
     options: Options;
+    previous: any;
     constructor(public mb: MbMapService, public rh: RentedHousesService) {
         this.options = this.getOptions(2000);
     }
@@ -72,12 +73,29 @@ export class MbMapComponent implements OnInit, OnChanges {
         }
     }
 
+    clickedMap(event) {
+        console.log(event);
+        if (this.previous) {
+            this.previous.close();
+        }
+    }
+
+    clickedMarker(label: string, infoWindow, marker, index: number) {
+        console.log('infoWindow', infoWindow);
+        if (this.previous && this.previous !== infoWindow) {
+            this.previous.close();
+        }
+        this.previous = infoWindow;
+    }
+
     private mapResultToMarker(v: Geocode, i: number): Marker {
         const mar: Marker = new Marker();
 
         mar.lat = v.results[0].geometry.location.lat;
         mar.lng = v.results[0].geometry.location.lng;
         mar.des = this.data[i].discription;
+
+        mar.title = this.data[i].title;
         mar.imagesUrl = this.data[i].images;
         mar.price = this.data[i].price;
         mar.url = this.data[i].url;
@@ -141,16 +159,6 @@ export class MbMapComponent implements OnInit, OnChanges {
         //   }
         // });
     }
-
-    /**
-     *
-     * @param label
-     * @param index
-     */
-    clickedMarker(label: string, index: number) {
-        console.log(`clicked the marker: ${label || index}`);
-    }
-
     /**
      *
      * @param maxPrice

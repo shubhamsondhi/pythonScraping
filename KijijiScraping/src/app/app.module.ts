@@ -6,18 +6,12 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { MatProgressBarModule, MatButtonModule } from '@angular/material';
 import { UrlValidatorDirective } from './Shared/url-validator.directive';
 import { SharedModule } from './Shared/shared.module';
-
-import { RouterModule } from '@angular/router';
 import { MbMapService } from './services/mb-map.service';
+import { ComponentsModule } from './components/components.module';
 @NgModule({
   declarations: [AppComponent],
   imports: [
-    SharedModule,
-    BrowserModule,
-    FormsModule,
-    MatProgressBarModule,
-    MatButtonModule,
-    BrowserAnimationsModule
+    ComponentsModule
   ],
   providers: [MbMapService],
   bootstrap: [AppComponent]
