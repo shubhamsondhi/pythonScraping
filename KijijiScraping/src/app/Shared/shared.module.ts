@@ -6,11 +6,13 @@ import { UrlValidatorDirective } from './url-validator.directive';
 import { AgmCoreModule } from '@agm/core';
 import { Ng5SliderModule } from 'ng5-slider';
 import { ServicesModule } from '../services/services.module';
+import { MatCardModule, MatExpansionModule } from '@angular/material';
 
 @NgModule({
   imports: [ServicesModule,
+    MatCardModule,
     CommonModule,
-    Ng5SliderModule,
+    Ng5SliderModule,MatExpansionModule,
     AgmCoreModule.forRoot({
       // apiKey: 'AIzaSyAvcDy5ZYc2ujCS6TTtI3RYX5QmuoV8Ffw'
       apiKey: 'AIzaSyC3u1VAIs0S5Ij-HmcxrTEMIx19X8UZH30'

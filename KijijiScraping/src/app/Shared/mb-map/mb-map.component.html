@@ -1,37 +1,71 @@
 <agm-map
-  [latitude]="lat"
-  [longitude]="lng"
-  [zoom]="zoom"
-  [disableDefaultUI]="false"
-  [zoomControl]="false"
+    (mapClick)="clickedMap($event)"
+    [latitude]="lat"
+    [longitude]="lng"
+    [zoom]="zoom"
+    mapTypeId="terrain"
+    [disableDefaultUI]="false"
+    [zoomControl]="false"
 >
-  <agm-marker
-    *ngFor="let m of changedMarkers; let i = index"
-    [latitude]="m.lat"
-    [longitude]="m.lng"
-    [label]="m.price"
-    [title]="m.date"
-    [markerDraggable]="m.draggable"
-  >
-    <agm-info-window maxWidth="400">
-      <ul class="list-group text-left ">
-        <li class="list-group-item">
-          <strong>Date: {{ m.date }}</strong>
-        </li>
-        <li class="list-group-item">
-          <strong>Price: {{ m.price }}</strong>
-        </li>
-        <li class="list-group-item">Address: {{ m.address }}</li>
+    <agm-marker
+        *ngFor="let m of changedMarkers; let i = index"
+        [latitude]="m.lat"
+        [longitude]="m.lng"
+        [title]="m.date"
+        [label]="{
+            color: 'black',
+            fontSize: '14px',
+            fontWeight: 'bold',
+            text: m.price
+        }"
+        [markerDraggable]="m.draggable"
+        (markerClick)="clickedMarker(m.label, infoWindow, i)"
+    >
+        <agm-info-window #infoWindow maxWidth="480">
+            <mat-card class="example-card">
+                <mat-card-header>
+                    <div mat-card-avatar class="example-header-image"></div>
+                    <mat-card-title>{{ m.title }}</mat-card-title>
+                    <mat-card-subtitle>
+                        <strong>Price: {{ m.price }}</strong>
+                    </mat-card-subtitle>
+                    <mat-card-subtitle>
+                        Address: {{ m.address }}
+                    </mat-card-subtitle>
+                    <mat-card-subtitle *ngIf="m.date">
+                        <strong>Date: {{ m.date }}</strong>
+                    </mat-card-subtitle>
+                </mat-card-header>
+                <mat-accordion>
+                    <!-- <mat-expansion-panel
+                        *ngFor="let url of m.imagesUrl; let i = index"
+                    >
+                        <mat-expansion-panel-header>
+                            <mat-panel-title>
+                                Image {{ i + 1 }}
+                            </mat-panel-title>
+                        </mat-expansion-panel-header>
 
-        <li class="list-group-item">
-          Url of ad: <a target="_blank" [href]="m.url"> Kijiji Url</a>
-        </li>
-        <li class="list-group-item">Description: {{ m.des }}</li>
-      </ul>
-    </agm-info-window>
-  </agm-marker>
+                        <img
+                            mat-card-image
+                            [src]="url"
+                            alt="Photo of a Shiba Inu"
+                        />
+                    </mat-expansion-panel> -->
+                </mat-accordion>
+                <mat-card-content>
+                    <p>Description: {{ m.des }}</p>
+                </mat-card-content>
+                <mat-card-actions>
+                    Url of ad:
+                    <a mat-button target="_blank" [href]="m.url"> Kijiji Url</a>
+                    <!-- <button  >SHARE</button> -->
+                </mat-card-actions>
+            </mat-card>
+        </agm-info-window>
+    </agm-marker>
 
-  <!-- <agm-circle [latitude]="lat + 0.3" [longitude]="lng"
+    <!-- <agm-circle [latitude]="lat + 0.3" [longitude]="lng"
       [radius]="5000"
       [fillColor]="'red'"
       [circleDraggable]="true"
@@ -40,9 +74,11 @@
 </agm-map>
 
 <ng5-slider
-  [(value)]="minMaxValue[0]"
-  [(highValue)]="minMaxValue[1]"
-  [options]="options"
-  (userChangeEnd)="onSliderChanged()"
+    [(value)]="minMaxValue[0]"
+    [(highValue)]="minMaxValue[1]"
+    [options]="options"
+    (userChangeEnd)="onSliderChanged()"
 ></ng5-slider>
-<button mat-raised-button color="primary" (click)="restMarker()"> Reset Markers</button>
+<button mat-raised-button color="primary" (click)="restMarker()">
+    Reset Markers
+</button>

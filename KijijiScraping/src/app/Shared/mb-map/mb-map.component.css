@@ -1,4 +1,25 @@
+mat-card-content {
+width: 400px;
+  height: 100px;
+  text-overflow: ellipsis;
+  /* white-space: nowrap; */
+  display: block;
+  overflow: hidden;
+}
 
 agm-map {
   height: 450px;
+  text-shadow: 0px 0px 9.2px white;
+
+
+};
+
+.agm-map-container-inner {
+  width: inherit;
+  height: inherit;
 }
+.agm-map-content {
+  display:none;
+}
+
+

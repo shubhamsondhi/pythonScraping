@@ -23,6 +23,7 @@ export class MbMapComponent implements OnInit, OnChanges {
     longitude = -147.20785;
     mapType = 'satellite';
     minMaxValue = [0, 100];
+
     // google maps zoom level
     zoom = 8;
 
@@ -33,6 +34,7 @@ export class MbMapComponent implements OnInit, OnChanges {
     markers: Marker[] = [];
     changedMarkers: Marker[] = [];
     options: Options;
+    previous: any;
     constructor(public mb: MbMapService, public rh: RentedHousesService) {
         this.options = this.getOptions(2000);
     }
@@ -71,6 +73,28 @@ export class MbMapComponent implements OnInit, OnChanges {
             // }
         }
     }
+    getLabelOption(price: string) {
+        return {
+            color: 'black',
+            fontFamily: '',
+            fontSize: '14px',
+            fontWeight: 'bold',
+            text: price,
+        };
+    }
+    clickedMap(event) {
+        if (this.previous) {
+            this.previous.close();
+            this.previous = undefined;
+        }
+    }
+
+    clickedMarker(label: string, infoWindow, marker, index: number) {
+        if (this.previous && this.previous !== infoWindow) {
+            this.previous.close();
+        }
+        this.previous = infoWindow;
+    }
 
     private mapResultToMarker(v: Geocode, i: number): Marker {
         const mar: Marker = new Marker();
@@ -78,7 +102,10 @@ export class MbMapComponent implements OnInit, OnChanges {
         mar.lat = v.results[0].geometry.location.lat;
         mar.lng = v.results[0].geometry.location.lng;
         mar.des = this.data[i].discription;
+
+        mar.title = this.data[i].title;
         mar.imagesUrl = this.data[i].images;
+        mar.date = this.data[i].date;
         mar.price = this.data[i].price;
         mar.url = this.data[i].url;
         mar.address = this.data[i].address;
@@ -141,16 +168,6 @@ export class MbMapComponent implements OnInit, OnChanges {
         //   }
         // });
     }
-
-    /**
-     *
-     * @param label
-     * @param index
-     */
-    clickedMarker(label: string, index: number) {
-        console.log(`clicked the marker: ${label || index}`);
-    }
-
     /**
      *
      * @param maxPrice
