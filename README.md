@@ -28,6 +28,9 @@ Run `app.py` for a dev server. Navigate to `http://localhost:5001/`.
 ## Kijiji URL
 example url :https://www.kijiji.ca/b-short-term-rental/st-catharines/page-1/c42l80016
 
+## Screen Shot
+![image](https://user-images.githubusercontent.com/20360297/73206235-9008cf00-4110-11ea-9ae7-c2438b8d5749.png)
+
 ## Further help
 
 To get more help please email me at sh.sondhi@gmail.com
