@@ -3,11 +3,16 @@ import { CommonModule } from '@angular/common';
 import { MbMapService } from './mb-map.service';
 import { HttpClientModule } from '@angular/common/http';
 import { RentedHousesService } from './rented-houses.service';
+import { ErrorHandle } from '../Shared/errorHandle';
 
 @NgModule({
-  imports: [CommonModule, HttpClientModule],
-  exports: [],
-  declarations: [],
-  providers: [MbMapService, RentedHousesService,]
+    imports: [CommonModule, HttpClientModule],
+    exports: [],
+    declarations: [],
+    providers: [MbMapService, RentedHousesService],
 })
-export class ServicesModule {}
+export class ServicesModule extends  ErrorHandle {
+    constructor() {
+        super();
+    }
+}

@@ -9,21 +9,23 @@ import { ServicesModule } from '../services/services.module';
 import { MatCardModule, MatExpansionModule } from '@angular/material';
 
 @NgModule({
-  imports: [ServicesModule,
-    MatCardModule,
-    CommonModule,
-    Ng5SliderModule,MatExpansionModule,
-    AgmCoreModule.forRoot({
-      // apiKey: 'AIzaSyAvcDy5ZYc2ujCS6TTtI3RYX5QmuoV8Ffw'
-      apiKey: 'AIzaSyC3u1VAIs0S5Ij-HmcxrTEMIx19X8UZH30'
-      /* apiKey is required, unless you are a
+    imports: [
+        ServicesModule,
+        MatCardModule,
+        CommonModule,
+        Ng5SliderModule,
+        MatExpansionModule,
+        AgmCoreModule.forRoot({
+            // apiKey: 'AIzaSyAvcDy5ZYc2ujCS6TTtI3RYX5QmuoV8Ffw'
+            apiKey: 'AIzaSyC3u1VAIs0S5Ij-HmcxrTEMIx19X8UZH30',
+            /* apiKey is required, unless you are a
       premium customer, in which case you can
       use clientId
       */
-    })
-  ],
-  exports: [UrlValidatorDirective, MbMapComponent],
-  declarations: [MbMapComponent, MbTableComponent, UrlValidatorDirective],
-  providers: []
+        }),
+    ],
+    exports: [UrlValidatorDirective, MbMapComponent],
+    declarations: [MbMapComponent, MbTableComponent, UrlValidatorDirective],
+    providers: [],
 })
 export class SharedModule {}

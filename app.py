@@ -37,11 +37,11 @@ def rentedHouses():
 @app.route('/getTotalPages', methods=['POST'])
 def getNumberPages():
     urlObject = json.loads(request.data.decode())
-    print(urlObject)
+    # print(urlObject)
     url= urlObject['url']
-    print(kijijiUrl.match(url))
     if kijijiUrl.match(url):
         pages={}  
+        url = rRooms.getCorrectUrl(url)
         pages["totalAds"] = rRooms.GetTotalNumbersOfPages(url)
         pages["totalPages"] = rRooms.convertStringToInt(pages["totalAds"])
         pages["listOfpageUrls"] =rRooms.createPageUrls(pages["totalPages"],url)
@@ -66,6 +66,18 @@ def getItemsInfoByPage():
     else:
         return "Please enter the correct result",500
 
+@app.route('/getCategories', methods=['GET'])
+def getCategories():
+    result=rRooms.getCategories()
+    print(result)
+    return result,201
+
+@app.route('/getCategories', methods=['POST'])
+def getCategoryByID():
+    value = json.loads(request.data.decode())
+    result = rRooms.getCategoriesById(value['categoryId'])
+    print(result)
+    return result,201
 
 # api.add_resource(RentedHouses, '/rentedHouses') # Route_1
 # api.add_resource(Tracks, '/tracks') # Route_2

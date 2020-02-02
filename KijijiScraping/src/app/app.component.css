@@ -2,3 +2,28 @@
   padding-top: 20px;
   padding-bottom: 10px;
 }
+.example-sidenav{
+
+  padding-top: 100px;
+  padding-left: 20px;
+}
+.matformfield{
+
+  /* width: 100%; */
+
+}
+
+.price{
+margin-right: 10px;
+margin-left: 10px;
+
+  width: 40%;
+}
+.filterInputs{
+  display: flex;
+  flex-direction: column;
+}
+.filterInputs > * {
+  width: 100%;
+
+}

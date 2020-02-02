@@ -45,8 +45,12 @@ def stringToNumbers(totalAds):
     preTotal=re.sub(r"\s","",preTotal)
     return preTotal
 
-def GetTotalNumbersOfPages(mainurl):    
-    request = urllib2.urlopen(mainurl)    
+def getCorrectUrl(mainUrl):
+     request = urllib2.urlopen(mainUrl)
+     return request.url
+
+def GetTotalNumbersOfPages(mainUrl):    
+    request = urllib2.urlopen(mainUrl)    
     soup2 = BeautifulSoup(request, 'html.parser')
     totalAds=soup2.find('div',class_='showing').text
     preTotal=stringToNumbers(totalAds)
@@ -123,3 +127,12 @@ def saveCSV(fileName,items):
 # items = main(url1)
 # na = addInformation(items)
 
+def getCategories():
+    response = urllib2.urlopen("https://www.kijiji.ca/j-select-category.json")
+    return response.read()
+
+
+def getCategoriesById(categoryId):
+    url="https://www.kijiji.ca/j-select-category.json?categoryId="+str(categoryId)
+    response = urllib2.urlopen(url)
+    return response.read()

@@ -1,2 +1,144 @@
+<header>
+    <div class="navbar navbar-dark bg-dark box-shadow">
+        <div class="container d-flex justify-content-between">
+            <a href="#" class="navbar-brand d-flex align-items-center">
+                <i
+                    style="margin-right: 0.3em"
+                    class="fas fa-map-marked-alt"
+                ></i>
+                <strong>Kijiji scraper</strong>
+            </a>
+        </div>
+    </div>
+</header>
+<mat-drawer-container class="example-container" autosize>
+    <mat-drawer #drawer class="col-md-2 example-sidenav" opened mode="side">
+        <div class="filterInputs">
+            <mat-form-field appearance="outline">
+                <input
+                    min="1"
+                    (change)="createUrl()"
+                    type="number"
+                    matInput
+                    placeholder="Page number"
+                    #urlBox="ngModel"
+                    [(ngModel)]="startPage"
+                    required
+                    name="startbox"
+                    aria-describedby="basic-addon3"
+                />
+            </mat-form-field>
 
-<app-home></app-home>
+            <mat-form-field appearance="outline">
+                <mat-label>City Name</mat-label>
+                <mat-select
+                    name="cityDdl"
+                    #city
+                    [(ngModel)]="selectedCityCode"
+                    (selectionChange)="citySelected($event)"
+                ><mat-option>--</mat-option>
+                    <mat-option
+                        *ngFor="let items of cityNames.names"
+                        [value]="items.citycode"
+                    >
+                        {{ items.cityName }}</mat-option
+                    >
+                </mat-select>
+            </mat-form-field>
+
+            <mat-form-field appearance="outline" *ngIf="selectedCityCode">
+                <mat-label>Categories</mat-label>
+                <mat-select
+                    name="categoryDdl"
+                    #category
+                    [(ngModel)]="selectedcateGoryIdLevel1"
+                    (selectionChange)="categoryChanged($event)"
+                ><mat-option>--</mat-option>
+                    <mat-option
+                        *ngFor="let items of categories?.level1?.items"
+                        [value]="items.categoryId"
+                    >
+                        {{ items.name }}</mat-option
+                    >
+                </mat-select>
+            </mat-form-field>
+
+            <mat-form-field
+                appearance="outline"
+                *ngIf="selectedcateGoryIdLevel1"
+            >
+                <mat-label>Sub Categories</mat-label>
+                <mat-select
+                    name="categorySubDdl"
+                    [(ngModel)]="selectedcateGoryIdLevel2"
+                    (selectionChange)="categoryChanged($event)"
+                ><mat-option>--</mat-option>
+                    <mat-option
+                        *ngFor="let items of categories?.level2?.items"
+                        [value]="items.categoryId"
+                    >
+                        {{ items.name }}</mat-option
+                    >
+                </mat-select>
+            </mat-form-field>
+
+            <mat-form-field
+                appearance="outline"
+                *ngIf="
+                    categories?.level3?.items.length &&
+                    !(categories?.level3?.items.length === 0)
+                "
+            >
+                <mat-label>Level 3 Cagtegories</mat-label>
+                <mat-select
+                    name="categorySubDdl"
+                    [(ngModel)]="selectedcateGoryIdLevel3"
+                    (selectionChange)="categoryChanged($event)"
+                >
+                    <mat-option
+                        *ngFor="let items of categories?.level3?.items"
+                        [value]="items.categoryId"
+                    >
+                        {{ items.name }}</mat-option
+                    >
+                </mat-select>
+            </mat-form-field>
+        </div>
+        <mat-divider></mat-divider>
+        <div *ngIf="needPriceFilter">
+            <mat-form-field class="price" appearance="outline">
+                <input
+                    matInput
+                    (change)="createUrl()"
+                    type="text"
+                    [name]="minPrice"
+                    [(ngModel)]="minPrice"
+                    data-type="price"
+                    data-placeholder="price from"
+                    title="from"
+                    class="placeholder-text"
+                />
+            </mat-form-field>
+            -
+            <mat-form-field class="price" appearance="outline">
+                <input
+                    (change)="createUrl()"
+                    matInput
+                    type="text"
+                    [name]="maxPrice"
+                    [(ngModel)]="maxPrice"
+                    data-type="price"
+                    data-placeholder="price to"
+                    title="to"
+                    class="placeholder-text"
+                />
+            </mat-form-field>
+        </div>
+    </mat-drawer>
+    <div class="example-sidenav-content">
+        <app-home [url]="url"></app-home>
+        <button type="button" mat-button (click)="drawer.toggle()">
+            Toggle sidenav
+        </button>
+    </div>
+</mat-drawer-container>

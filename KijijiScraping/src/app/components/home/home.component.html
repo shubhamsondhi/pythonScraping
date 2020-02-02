@@ -1,16 +1,4 @@
-<header>
-    <div class="navbar navbar-dark bg-dark box-shadow">
-        <div class="container d-flex justify-content-between">
-            <a href="#" class="navbar-brand d-flex align-items-center">
-                <i
-                    style="margin-right: 0.3em"
-                    class="fas fa-map-marked-alt"
-                ></i>
-                <strong>Kijiji scraper</strong>
-            </a>
-        </div>
-    </div>
-</header>
+
 <div class="jumbotron ">
     <div class="container">
         <form #rentHomes="ngForm" class="example-form">
@@ -23,6 +11,8 @@
                             >
                         </div>
                         <input
+                        disabled
+
                             type="text"
                             class="form-control"
                             #urlBox="ngModel"
@@ -36,24 +26,7 @@
                 </div>
             </div>
             <div class="row">
-                <div class="col-lg-3">
-                    <div class="input-group mb-3">
-                        <div class="input-group-prepend">
-                            <span class="input-group-text" id="basic-addon3"
-                                >Opend Page:</span
-                            >
-                        </div>
-                        <input
-                            type="number"
-                            class="form-control"
-                            #urlBox="ngModel"
-                            [(ngModel)]="startPage"
-                            required
-                            name="startbox"
-                            aria-describedby="basic-addon3"
-                        />
-                    </div>
-                </div>
+
                 <div class="col-lg-3">
                     <div class="input-group mb-3">
                         <div class="input-group-prepend">
@@ -76,6 +49,7 @@
               <a href="#">Open from Memory</a> -->
                 <div class="col-lg-2">
                     <button
+                    [disabled]="!this.url"
                         mat-raised-button
                         color="primary"
                         (click)="getRentedHouses()"
