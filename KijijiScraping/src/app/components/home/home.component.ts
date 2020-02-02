@@ -54,7 +54,7 @@ export class HomeComponent implements OnInit {
     /**
      * On button click
      */
-    private DeleteHistoryData() {
+    public DeleteHistoryData() {
         localStorage.removeItem('dataSource');
     }
 
@@ -62,7 +62,7 @@ export class HomeComponent implements OnInit {
      * on Button click
      * @param page
      */
-    private GetAllTheItems(page: Page): Observable<House[]>[] {
+    public GetAllTheItems(page: Page): Observable<House[]>[] {
         console.log('items', page);
 
         return page.listOfpageUrls.map(pageUrl =>

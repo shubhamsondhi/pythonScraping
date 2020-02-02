@@ -10,13 +10,16 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - uses: actions/checkout@v2
-    - name: Display path
-      run: echo $PATH
-    - name: Change the directory
-      working-directory: ./KijijiScraping
-      run: |
-        npm install
-        npm start
-
+    steps:
+    # Install node packages
+    - name: 'gcr.io/cloud-builders/npm'
+    args: [ 'install' ]
+    
+    # Build productive files
+    - name: 'gcr.io/cloud-builders/npm'
+    args: [ 'run', 'build', '--prod' ]
+    
+    # Deploy to google cloud app egnine
+    - name: 'gcr.io/cloud-builders/gcloud'
+    args: ['app', 'deploy', '--version=prod']
 

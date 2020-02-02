@@ -3,15 +3,17 @@ import { HttpClient } from '@angular/common/http';
 import { ErrorHandle } from '../Shared/errorHandle';
 import { Category } from '../models/category';
 import { catchError } from 'rxjs/internal/operators/catchError';
+import { environment } from 'src/environments/environment';
 
 @Injectable({
     providedIn: 'root',
 })
 export class KijijiService extends ErrorHandle {
+    pyScraping;
     constructor(private http: HttpClient) {
         super();
+        this.pyScraping = environment.url;
     }
-    pyScraping = `http://127.0.0.1:5000/`;
 
     getCategoryLevel1() {
         return this.http

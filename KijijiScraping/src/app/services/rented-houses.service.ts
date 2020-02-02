@@ -6,20 +6,23 @@ import { throwError, Observable } from 'rxjs';
 import { House } from '../models/house';
 import { Page } from '../models/page';
 import { ErrorHandle } from '../Shared/errorHandle';
+import { environment } from 'src/environments/environment';
 
 @Injectable({
     providedIn: 'root',
 })
 export class RentedHousesService extends ErrorHandle {
     constructor(private http: HttpClient) {
-      super()
+        super();
     }
 
     apiKey = 'AIzaSyC3u1VAIs0S5Ij-HmcxrTEMIx19X8UZH30';
-    pyScraping = `http://127.0.0.1:5000/`;
+    pyScraping = environment.url;
+
     getUrl(api: string) {
         return this.pyScraping + api;
     }
+
     getHouses(url: any) {
         return this.http
             .post<House[]>(this.pyScraping, url)
@@ -37,6 +40,4 @@ export class RentedHousesService extends ErrorHandle {
             .post<House[]>(this.getUrl('getItemsInfoByPage'), url)
             .pipe(catchError(this.handleError));
     }
-
-
 }

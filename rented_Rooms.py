@@ -5,7 +5,8 @@ import csv
 import os
 import pprint
 import json
-
+import grequests
+import lxml
 savePath ="./"
 url1="https://www.kijiji.ca/b-short-term-rental/st-catharines/page-1/c42l80016"
 regex = r"(page-.)"
@@ -83,7 +84,7 @@ def GetAdsListBYPages(pageUrl_list):
     adds_list={}
     items=[]
     response = urllib2.urlopen(pageUrl_list)
-    soup = BeautifulSoup(response, 'html.parser')
+    soup = BeautifulSoup(response, 'lxml')
     #getting all the links----------
     for ad in soup.find_all('div',class_='regular-ad'):
         if(ad is not None):
@@ -105,10 +106,12 @@ def GetAdsListBYPages(pageUrl_list):
 # print (m.shape)
 
 def getInformation(items):
-    for val in items:  
+    reqs = [grequests.get(val['url']) for val in items]
+    resp = grequests.map(reqs)
+    for i, val in enumerate(items):  
         # print(val)  
-        request = urllib2.urlopen(val['url'])    
-        soup2 = BeautifulSoup(request, 'html.parser') 
+        # request = urllib2.urlopen(val['url'])   
+        soup2 = BeautifulSoup(resp[i].text, 'lxml') 
         # print([(x[0].find('span')) for x in findPrice(soup2)])
         val['price']= findPrice(soup2)
         val['address']= [x.text for x in findAddress(soup2)][0]
