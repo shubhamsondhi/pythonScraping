@@ -36,23 +36,20 @@
                         <strong>Date: {{ m.date }}</strong>
                     </mat-card-subtitle>
                 </mat-card-header>
-                <mat-accordion>
-                    <!-- <mat-expansion-panel
-                        *ngFor="let url of m.imagesUrl; let i = index"
-                    >
-                        <mat-expansion-panel-header>
-                            <mat-panel-title>
-                                Image {{ i + 1 }}
-                            </mat-panel-title>
-                        </mat-expansion-panel-header>
 
-                        <img
-                            mat-card-image
-                            [src]="url"
-                            alt="Photo of a Shiba Inu"
-                        />
-                    </mat-expansion-panel> -->
-                </mat-accordion>
+                <mat-grid-list cols="4" rowHeight="100px">
+                    <mat-grid-tile
+                        *ngFor="let item of m.imagesUrl"
+                        [colspan]="1"
+                        [rowspan]="1"
+                    >
+                        <img mat-card-md-image [src]="item" />
+                    </mat-grid-tile>
+                </mat-grid-list>
+                <br>
+                <mat-divider></mat-divider>
+                <br>
+
                 <mat-card-content>
                     <p>Description: {{ m.des }}</p>
                 </mat-card-content>

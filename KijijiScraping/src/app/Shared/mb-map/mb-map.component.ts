@@ -57,6 +57,7 @@ export class MbMapComponent implements OnInit, OnChanges {
                     if (v.status === 'OK' && v.results) {
                         const mar = this.mapResultToMarker(v, i);
                         this.markers.push(mar);
+                        console.log('this.markers', this.markers);
                     }
                 });
                 this.restMarker();
@@ -67,7 +68,11 @@ export class MbMapComponent implements OnInit, OnChanges {
                 // );
             });
         } else {
-            console.log('this.markers', this.markers);
+            // console.log('this.markers', this.markers);
+            if (this.data.length === 0) {
+                this.markers = new Array<Marker>();
+                this.restMarker();
+            }
             // if (localStorage.getItem('dataSource') !== null) {
             //     // this.markers = JSON.parse(localStorage.getItem('dataSource'));
             // }

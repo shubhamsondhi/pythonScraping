@@ -7,7 +7,8 @@ import { AgmCoreModule } from '@agm/core';
 import { Ng5SliderModule } from 'ng5-slider';
 import { ServicesModule } from '../services/services.module';
 import { MatCardModule, MatExpansionModule } from '@angular/material';
-
+import {MatGridListModule} from '@angular/material/grid-list';
+import {MatDividerModule} from '@angular/material/divider';
 @NgModule({
     imports: [
         ServicesModule,
@@ -15,6 +16,8 @@ import { MatCardModule, MatExpansionModule } from '@angular/material';
         CommonModule,
         Ng5SliderModule,
         MatExpansionModule,
+        MatGridListModule,
+        MatDividerModule,
         AgmCoreModule.forRoot({
             // apiKey: 'AIzaSyAvcDy5ZYc2ujCS6TTtI3RYX5QmuoV8Ffw'
             apiKey: 'AIzaSyArew2eZn1_SdNAQhLWU1Sjs5jQYWmptMA',

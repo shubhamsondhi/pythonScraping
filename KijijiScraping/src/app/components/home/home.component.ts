@@ -56,6 +56,8 @@ export class HomeComponent implements OnInit {
      */
     public DeleteHistoryData() {
         localStorage.removeItem('dataSource');
+        this.scrapedData = new Array<House>();
+
     }
 
     /**
