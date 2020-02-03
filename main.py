@@ -1,6 +1,6 @@
 import rented_Rooms as rRooms
 import re
-from flask import Flask,jsonify , json, request, render_template  ,redirect, url_for
+from flask import Flask,jsonify , json, request, redirect
 # from jwt import decode, exceptions
 from flask_cors import CORS
 
