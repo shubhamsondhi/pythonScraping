@@ -57,7 +57,7 @@ export class MbMapComponent implements OnInit, OnChanges {
                     if (v.status === 'OK' && v.results) {
                         const mar = this.mapResultToMarker(v, i);
                         this.markers.push(mar);
-                        console.log('this.markers', this.markers);
+                        // console.log('this.markers', this.markers);
                     }
                 });
                 this.restMarker();
