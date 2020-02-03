@@ -1,4 +1,6 @@
-# pythonScraping
+
+url: https://kijijscrapper.appspot.com/ 
+# pythonScraping 
 
 ## Introduction
 Get all the data about rented rooms on Kijiji.
@@ -12,18 +14,10 @@ This project was generated with Python and Angular.
 
 ## Development server
 
-Run `app.py` for a dev server. Navigate to `http://localhost:5001/`.
+Run `main.py` for a dev server. Navigate to `http://localhost:5000/`.
 
 ## PY Packages 
- re
- flask 
- flask_restful 
- flask_cors 
- BeautifulSoup
- urllib.request
- pprint
- os
- json
+ pip install -r requirements.txt
 
 ## Kijiji URL
 example url :https://www.kijiji.ca/b-short-term-rental/st-catharines/page-1/c42l80016
