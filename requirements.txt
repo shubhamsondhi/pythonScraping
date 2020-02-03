@@ -1,5 +1,6 @@
 #  python -m venv env
 #  --upgrade pip
+# gcloud app deploy
   bs4
   flask
   flask_restful

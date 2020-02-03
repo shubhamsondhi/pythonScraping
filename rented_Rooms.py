@@ -2,9 +2,11 @@ from bs4 import BeautifulSoup
 import  urllib.request as urllib2
 import re
 import csv
-import os
-import pprint
-import json
+# import os
+# import pprint
+# import json
+
+
 import grequests
 import lxml
 savePath ="./"

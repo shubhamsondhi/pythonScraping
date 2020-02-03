@@ -1,6 +1,6 @@
 import rented_Rooms as rRooms
 import re
-from flask import Flask,jsonify , json, request, g, abort
+from flask import Flask,jsonify , json, request, render_template  
 # from jwt import decode, exceptions
 from flask_cors import CORS
 
@@ -19,6 +19,9 @@ regex = r"(page-.)"
 # items = rRooms.main(url1)
 # rRooms.addInformation("Short term Room",items)
 
+@app.route('/')
+def root():
+    return render_template("index.html")
 
 @app.route('/rentedHouses', methods=['POST'])
 def rentedHouses():
