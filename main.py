@@ -1,6 +1,6 @@
 import rented_Rooms as rRooms
 import re
-from flask import Flask,jsonify , json, request, render_template  
+from flask import Flask,jsonify , json, request, render_template  ,redirect, url_for
 # from jwt import decode, exceptions
 from flask_cors import CORS
 
@@ -8,7 +8,7 @@ from flask_cors import CORS
 # post_parser.add_argument('url')
 kijijiUrl = re.compile(r"https://www.kijiji.ca/.*")
 
-app = Flask(__name__)
+app = Flask(__name__, static_url_path='/', static_folder='templates' )
 CORS(app)
 # api = Api(app)
 
@@ -21,7 +21,7 @@ regex = r"(page-.)"
 
 @app.route('/')
 def root():
-    return render_template("index.html")
+    return redirect("index.html")
 
 @app.route('/rentedHouses', methods=['POST'])
 def rentedHouses():
