@@ -100,7 +100,12 @@ export class MbMapComponent implements OnInit, OnChanges {
         }
         this.previous = infoWindow;
     }
-
+    changeInRadius(event) {
+        console.log(event);
+    }
+    centerChanged(event) {
+      console.log(event);
+    }
     private mapResultToMarker(v: Geocode, i: number): Marker {
         const mar: Marker = new Marker();
 
