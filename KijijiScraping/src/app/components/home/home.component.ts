@@ -37,7 +37,7 @@ export class HomeComponent implements OnInit {
         console.log('runing');
         const id = this.requestCount;
         const page = this.url.match(/page-.*/)[0];
-        this.ns.completion(id, 'Processing Request Id', page);
+        this.ns.completion(id, 'Processing Request', page);
         this.requestCount++;
         this.rh
             .getItemsInfoByPage({
