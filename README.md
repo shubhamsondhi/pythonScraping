@@ -10,7 +10,7 @@ I love kijiji rental ads database and I  wants these ads to visualize on map. So
 This project was generated with Python and Angular.
 
 ## Dependancy File
-./pythonDep.txt
+./requirements.txt
 
 ## Development server
 
