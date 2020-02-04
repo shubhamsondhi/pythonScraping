@@ -122,6 +122,10 @@ THE SOFTWARE.
 
 @angular/material/grid-list
 
+@angular/material/icon
+
+@angular/material/progress-bar
+
 @angular/material/select
 
 @angular/material/sidenav

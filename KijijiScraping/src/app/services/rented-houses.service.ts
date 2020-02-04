@@ -1,12 +1,10 @@
 import { Injectable } from '@angular/core';
 
-import { catchError } from 'rxjs/operators';
+import { catchError, retry } from 'rxjs/operators';
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { throwError, Observable } from 'rxjs';
 import { House } from '../models/house';
 import { Page } from '../models/page';
-import { ErrorHandle } from '../Shared/errorHandle';
-import { environment } from 'src/environments/environment';
 import { SharedService } from '../Shared/Shared.service';
 
 @Injectable({
@@ -38,6 +36,8 @@ export class RentedHousesService  {
     getItemsInfoByPage(url: any): Observable<House[]> {
         return this.http
             .post<House[]>(this.getUrl('getItemsInfoByPage'), url)
-            .pipe(catchError(this.ss.handleError));
+            .pipe(
+              retry(2),
+              catchError(this.ss.handleError));
     }
 }

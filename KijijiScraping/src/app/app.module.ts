@@ -14,6 +14,7 @@ import {MatSelectModule} from '@angular/material/select';
 import {MatFormFieldModule} from '@angular/material/form-field';
 import {MatDividerModule} from '@angular/material/divider';
 import {MatAutocompleteModule} from '@angular/material/autocomplete';
+import { SharedModule } from './Shared/shared.module';
 @NgModule({
     declarations: [AppComponent],
     imports: [
@@ -23,6 +24,7 @@ import {MatAutocompleteModule} from '@angular/material/autocomplete';
         MatInputModule,
         MatSelectModule,
         MatSidenavModule,
+        SharedModule,
         MatFormFieldModule,
         MatDividerModule,
         MatAutocompleteModule

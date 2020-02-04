@@ -5,7 +5,7 @@
         // "**/.git": true,         // this is a default value
         // "**/.DS_Store": true,    // this is a default value
         "**/e2e": true,
-        "**/assets": true,
+        // "**/assets": true,
 
         "**/node_modules": true, // this excludes all folders 
                                  // named "node_modules" from 

@@ -3,6 +3,7 @@ import { House } from 'src/app/models/house';
 import { RentedHousesService } from 'src/app/services/rented-houses.service';
 import { Observable } from 'rxjs';
 import { Page } from 'src/app/models/page';
+import { NotificationService } from 'src/app/services/notification.service';
 @Component({
     selector: 'app-home',
     templateUrl: './home.component.html',
@@ -10,13 +11,17 @@ import { Page } from 'src/app/models/page';
 })
 export class HomeComponent implements OnInit {
     title = 'HouseScraping';
+    requestCount = 1;
     // url = '';
     startPage = 1;
     endPage = 3;
     isKeep = true;
     scrapedData = new Array<House>();
     @Input() url: string;
-    constructor(public rh: RentedHousesService) {}
+    constructor(
+        public rh: RentedHousesService,
+        public ns: NotificationService
+    ) {}
 
     ngOnInit() {
         if (localStorage.getItem('dataSource') !== null) {
@@ -29,26 +34,39 @@ export class HomeComponent implements OnInit {
      * get all the list of rented house
      */
     getRentedHouses() {
-        this.rh.getItemsInfoByPage({
+        console.log('runing');
+        const id = this.requestCount;
+        const page = this.url.match(/page-.*/)[0];
+        this.ns.completion(id, 'Processing Request Id', page);
+        this.requestCount++;
+        this.rh
+            .getItemsInfoByPage({
                 url: this.url,
             })
-            .subscribe(items => {
-                console.log('items', items);
-                if (!this.isKeep) {
-                    localStorage.removeItem('dataSource');
-                }
-                this.scrapedData = new Array<House>();
-                items.forEach(element => {
-                    this.scrapedData.push(element);
-                });
+            .subscribe(
+                items => {
+                    if (!this.isKeep) {
+                        localStorage.removeItem('dataSource');
+                    }
+                    this.scrapedData = new Array<House>();
+                    items.forEach(element => {
+                        this.scrapedData.push(element);
+                    });
 
-                localStorage.setItem(
-                    'dataSource',
-                    JSON.stringify(this.scrapedData)
-                );
-                this.scrapedData = [...this.scrapedData];
-                console.log('this.scrapedData', this.scrapedData);
-            });
+                    localStorage.setItem(
+                        'dataSource',
+                        JSON.stringify(this.scrapedData)
+                    );
+                    console.log(id);
+
+                    this.ns.completion(id, 'Completed!', '', true);
+                    this.scrapedData = [...this.scrapedData];
+                },
+                err => {
+                    this.ns.completion(id, 'Error', err, false);
+                    console.error(err);
+                }
+            );
     }
 
     /**
@@ -57,7 +75,6 @@ export class HomeComponent implements OnInit {
     public DeleteHistoryData() {
         localStorage.removeItem('dataSource');
         this.scrapedData = new Array<House>();
-
     }
 
     /**
