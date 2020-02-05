@@ -15,16 +15,18 @@
 </header>
 <mat-drawer-container class="example-container" autosize>
     <mat-drawer #drawer class="col-md-2 example-sidenav" opened mode="side">
+      <h2>Tools to create URL</h2>
+      <br>
         <div class="filterInputs">
             <mat-form-field appearance="outline">
                 <input
                     min="1"
-                    (change)="createUrl()"
+                    (change)="createUrl($event)"
                     type="number"
                     matInput
                     placeholder="Page number"
                     #urlBox="ngModel"
-                    [(ngModel)]="startPage"
+                    [(ngModel)]="urlV2.pageNumber"
                     required
                     name="startbox"
                     aria-describedby="basic-addon3"
@@ -111,7 +113,7 @@
             <mat-form-field class="price" appearance="outline">
                 <input
                     matInput
-                    (change)="createUrl()"
+                    (change)="createUrl($event)"
                     type="text"
                     [name]="minPrice"
                     [(ngModel)]="minPrice"
@@ -124,7 +126,7 @@
             -
             <mat-form-field class="price" appearance="outline">
                 <input
-                    (change)="createUrl()"
+                    (change)="createUrl($event)"
                     matInput
                     type="text"
                     [name]="maxPrice"
@@ -138,7 +140,7 @@
         </div>
     </mat-drawer>
     <div class="example-sidenav-content">
-        <app-home [url]="url"></app-home>
+        <app-home  [urlV2]="urlV2"[url]="url"></app-home>
         <button type="button" mat-button (click)="drawer.toggle()">
             Toggle sidenav
         </button>

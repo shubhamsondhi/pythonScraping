@@ -62,7 +62,7 @@
         </agm-info-window>
     </agm-marker>
 
-    <agm-circle [latitude]="lat + 0.3" [longitude]="lng"
+    <agm-circle *ngIf="drawCircle" [latitude]="lat + 0.3" [longitude]="lng"
     [radius]="5000"
     (centerChange)="centerChanged($event)"
     (radiusChange)="changeInRadius($event)"

@@ -4,6 +4,8 @@ import {
     Input,
     OnChanges,
     SimpleChanges,
+    Output,
+    EventEmitter,
 } from '@angular/core';
 import { MbMapService } from 'src/app/services/mb-map.service';
 import { Marker } from './marker';
@@ -12,6 +14,7 @@ import { forkJoin } from 'rxjs';
 import { House } from 'src/app/models/house';
 import { Options, LabelType } from 'ng5-slider';
 import { Geocode } from 'src/app/models/geocode';
+import { Circle } from 'src/app/models/circle';
 @Component({
     selector: 'app-mb-map',
     templateUrl: './mb-map.component.html',
@@ -19,17 +22,18 @@ import { Geocode } from 'src/app/models/geocode';
 })
 export class MbMapComponent implements OnInit, OnChanges {
     @Input() data: House[];
-    latitude = -28.68352;
-    longitude = -147.20785;
-    mapType = 'satellite';
-    minMaxValue = [0, 100];
+    @Input() drawCircle = false;
+    @Output() circleChanged = new EventEmitter<Circle>();
 
+    mapType: string;
+    minMaxValue: number[]; // = [0, 100];
+    circle: Circle;
     // google maps zoom level
-    zoom = 8;
+    zoom: number;
 
     // initial center position for the map
-    lat = 43.0582;
-    lng = -79.2902;
+    lat: number;
+    lng: number;
 
     markers: Marker[] = [];
     changedMarkers: Marker[] = [];
@@ -37,6 +41,15 @@ export class MbMapComponent implements OnInit, OnChanges {
     previous: any;
     constructor(public mb: MbMapService, public rh: RentedHousesService) {
         this.options = this.getOptions(2000);
+        this.circle = new Circle();
+
+        this.mapType = 'satellite';
+        this.minMaxValue = [0, 100];
+        this.zoom = 8;
+
+        // initial center position for the map
+        this.lat = 43.0582;
+        this.lng = -79.2902;
     }
 
     ngOnChanges(simp: SimpleChanges) {
@@ -100,11 +113,33 @@ export class MbMapComponent implements OnInit, OnChanges {
         }
         this.previous = infoWindow;
     }
-    changeInRadius(event) {
-        console.log(event);
+    changeInRadius(event: number) {
+        const inKMradius = event / 1000;
+        this.circle.radius = inKMradius;
+        this.validateAndEmitCircle();
     }
-    centerChanged(event) {
-      console.log(event);
+    private validateAndEmitCircle() {
+        if (
+            this.circle &&
+            this.circle.radius &&
+            this.circle.lat &&
+            this.circle.lng
+        ) {
+            this.mb.getAddress(this.circle).subscribe(geoResult => {
+                this.circle.address = geoResult.results
+                    ? geoResult.results[0].formatted_address
+                    : '';
+                this.circleChanged.emit(this.circle);
+            });
+        }
+    }
+
+    centerChanged(event: Circle) {
+        // console.log(event);
+
+        this.circle.lat = event.lat;
+        this.circle.lng = event.lng;
+        this.validateAndEmitCircle();
     }
     private mapResultToMarker(v: Geocode, i: number): Marker {
         const mar: Marker = new Marker();

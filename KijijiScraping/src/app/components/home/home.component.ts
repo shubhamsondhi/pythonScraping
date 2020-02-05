@@ -1,9 +1,12 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { House } from 'src/app/models/house';
 import { RentedHousesService } from 'src/app/services/rented-houses.service';
 import { Observable } from 'rxjs';
 import { Page } from 'src/app/models/page';
 import { NotificationService } from 'src/app/services/notification.service';
+import { Circle } from 'src/app/models/circle';
+import { Url } from 'src/app/models/url';
+
 @Component({
     selector: 'app-home',
     templateUrl: './home.component.html',
@@ -16,8 +19,11 @@ export class HomeComponent implements OnInit {
     startPage = 1;
     endPage = 3;
     isKeep = true;
+    isDrawingCircle: false;
     scrapedData = new Array<House>();
+    @Output() addressWithLatLng = new EventEmitter<string>();
     @Input() url: string;
+    @Input() urlV2: Url;
     constructor(
         public rh: RentedHousesService,
         public ns: NotificationService
@@ -28,7 +34,6 @@ export class HomeComponent implements OnInit {
             this.scrapedData = JSON.parse(localStorage.getItem('dataSource'));
         }
     }
-    validator() {}
 
     /**
      * get all the list of rented house
@@ -36,7 +41,10 @@ export class HomeComponent implements OnInit {
     getRentedHouses() {
         console.log('runing');
         const id = this.requestCount;
-        const page = this.url.match(/page-.*/)[0];
+
+        const page = this.url.match(/page-.*/)
+            ? this.url.match(/page-.*/)[0]
+            : this.url;
         this.ns.completion(id, 'Processing Request', page);
         this.requestCount++;
         this.rh
@@ -60,6 +68,7 @@ export class HomeComponent implements OnInit {
                     console.log(id);
 
                     this.ns.completion(id, 'Completed!', '', true);
+                    this.isDrawingCircle = false;
                     this.scrapedData = [...this.scrapedData];
                 },
                 err => {
@@ -69,6 +78,14 @@ export class HomeComponent implements OnInit {
             );
     }
 
+    circleChanged(circle: Circle) {
+        if (this.url) {
+            const addres = encodeURI(
+                `ll=${circle.lat} ${circle.lng}&address=${circle.address}&radius=${circle.radius}`
+            );
+            this.addressWithLatLng.emit(addres);
+        }
+    }
     /**
      * On button click
      */
@@ -76,7 +93,22 @@ export class HomeComponent implements OnInit {
         localStorage.removeItem('dataSource');
         this.scrapedData = new Array<House>();
     }
+    private setupUrl(urlV2: Url) {
+        this.url = `${urlV2.baseUrl}b-${urlV2.category.replace(/-|\s./g, '')}/${
+            urlV2.city.cityurl
+        }/page-${urlV2.pageNumber}/c${urlV2.urlcode.categoryCode}${
+            urlV2.city.citycode
+        }`;
 
+        if (urlV2.priceFilter) {
+            this.addFilter(urlV2.priceFilter);
+        }
+    }
+
+    addFilter(arg0: string) {
+        const va = this.url.includes('?') ? '&' : '?';
+        return (this.url = this.url + va + arg0);
+    }
     /**
      * on Button click
      * @param page

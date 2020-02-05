@@ -7,7 +7,7 @@ import { MatProgressBarModule, MatButtonModule } from '@angular/material';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { SharedModule } from '../Shared/shared.module';
 import { UrlValidatorDirective } from '../Shared/url-validator.directive';
-
+import {MatCheckboxModule} from '@angular/material/checkbox';
 @NgModule({
     imports: [
         CommonModule,
@@ -15,6 +15,7 @@ import { UrlValidatorDirective } from '../Shared/url-validator.directive';
         FormsModule,
         MatProgressBarModule,
         MatButtonModule,
+        MatCheckboxModule,
         BrowserAnimationsModule,
         SharedModule,
     ],

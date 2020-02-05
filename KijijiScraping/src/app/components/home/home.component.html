@@ -10,8 +10,6 @@
                             >
                         </div>
                         <input
-
-
                             type="text"
                             class="form-control"
                             #urlBox="ngModel"
@@ -23,32 +21,10 @@
                         />
                     </div>
                 </div>
-            </div>
-            <div class="row">
-
-                <div class="col-lg-3">
-                    <div class="input-group mb-3">
-                        <div class="input-group-prepend">
-                            <span class="input-group-text" id="basic-addon3"
-                                >Keep Last result:</span
-                            >
-                        </div>
-                        <input
-                            type="checkbox"
-                            class="form-control"
-                            #urlBox="ngModel"
-                            [(ngModel)]="isKeep"
-                            name="keepLogs"
-                            aria-describedby="basic-addon3"
-                        />
-                    </div>
-                </div>
-                <!-- <a style="float: right;" href="#">Save in Memory</a>|
-              <a  style="float: right;"href="#">Remove from Memory</a>|
-              <a href="#">Open from Memory</a> -->
                 <div class="col-lg-2">
                     <button
-                    [disabled]="!this.url"
+                        name="runbutton"
+                        [disabled]="!this.url"
                         mat-raised-button
                         color="primary"
                         (click)="getRentedHouses()"
@@ -56,14 +32,33 @@
                         Run
                     </button>
                 </div>
+            </div>
+            <br />
+            <div class="row">
+                <div class="col-lg-1">
+                    <!-- /empty space for design purpose -->
+                </div>
+                <div class="col-lg-3">
+                    <mat-checkbox name="isKeep" [(ngModel)]="isKeep"
+                        >Keep Last result:</mat-checkbox
+                    >
+                </div>
+
                 <div class="col-lg-2">
                     <button
+                    name="deleteButton"
                         mat-raised-button
                         color="primary"
                         (click)="DeleteHistoryData()"
                     >
                         Delete History
                     </button>
+                </div>
+
+                <div class="col-lg-2">
+                    <mat-checkbox name="drawBox" [(ngModel)]="isDrawingCircle"
+                        >Draw Circle</mat-checkbox
+                    >
                 </div>
             </div>
             <div
@@ -81,10 +76,15 @@
         <!-- <mat-progress-bar mode="buffer"></mat-progress-bar> -->
     </div>
 </div>
+
 <!-- section 2 -->
 <div class="container text-center">
     <div class="col-lg-12" style="padding-bottom:10px">
-        <app-mb-map [data]="scrapedData"></app-mb-map>
+        <app-mb-map
+            [drawCircle]="isDrawingCircle"
+            (circleChanged)="circleChanged($event)"
+            [data]="scrapedData"
+        ></app-mb-map>
     </div>
     <!-- <button mat-raised-button color="primary">Download CSV</button> -->
 </div>
