@@ -1,4 +1,13 @@
-import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
+import {
+    Component,
+    OnInit,
+    Input,
+    Output,
+    EventEmitter,
+    OnChanges,
+    SimpleChange,
+    SimpleChanges,
+} from '@angular/core';
 import { House } from 'src/app/models/house';
 import { RentedHousesService } from 'src/app/services/rented-houses.service';
 import { Observable } from 'rxjs';
@@ -12,7 +21,7 @@ import { Url } from 'src/app/models/url';
     templateUrl: './home.component.html',
     styleUrls: ['./home.component.css'],
 })
-export class HomeComponent implements OnInit {
+export class HomeComponent implements OnInit, OnChanges {
     title = 'HouseScraping';
     requestCount = 1;
     // url = '';
@@ -34,7 +43,15 @@ export class HomeComponent implements OnInit {
             this.scrapedData = JSON.parse(localStorage.getItem('dataSource'));
         }
     }
+    ngOnChanges(change: SimpleChanges) {
+        console.log(' this.urlV2', this.urlV2);
 
+        this.setupUrl(this.urlV2);
+
+        // if (change.currentValue !== change.previousValue) {
+
+        // }
+    }
     /**
      * get all the list of rented house
      */
@@ -83,7 +100,10 @@ export class HomeComponent implements OnInit {
             const addres = encodeURI(
                 `ll=${circle.lat} ${circle.lng}&address=${circle.address}&radius=${circle.radius}`
             );
-            this.addressWithLatLng.emit(addres);
+            this.setupUrl(this.urlV2);
+            this.addFilter(addres);
+
+            // this.addressWithLatLng.emit(addres);
         }
     }
     /**
@@ -94,20 +114,23 @@ export class HomeComponent implements OnInit {
         this.scrapedData = new Array<House>();
     }
     private setupUrl(urlV2: Url) {
-        this.url = `${urlV2.baseUrl}b-${urlV2.category.replace(/-|\s./g, '')}/${
-            urlV2.city.cityurl
-        }/page-${urlV2.pageNumber}/c${urlV2.urlcode.categoryCode}${
-            urlV2.city.citycode
-        }`;
-
-        if (urlV2.priceFilter) {
-            this.addFilter(urlV2.priceFilter);
+        if (urlV2 && urlV2.category && urlV2.urlcode && urlV2.pageNumber) {
+            this.url = `${urlV2.baseUrl}b-${urlV2.category.replace(
+                /-|\s./g,
+                ''
+            )}/${urlV2.city.cityurl}/page-${urlV2.pageNumber}/c${
+                urlV2.urlcode.categoryCode
+            }${urlV2.city.citycode}`;
         }
+
+        this.addFilter(urlV2.priceFilter);
     }
 
     addFilter(arg0: string) {
-        const va = this.url.includes('?') ? '&' : '?';
-        return (this.url = this.url + va + arg0);
+        if (arg0) {
+            const va = this.url.includes('?') ? '&' : '?';
+            this.url = this.url + va + arg0;
+        }
     }
     /**
      * on Button click

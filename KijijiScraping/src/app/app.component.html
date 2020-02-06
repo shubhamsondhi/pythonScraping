@@ -38,7 +38,7 @@
                 <mat-select
                     name="cityDdl"
                     #city
-                    [(ngModel)]="selectedCityCode"
+                    [(ngModel)]="this.urlV2?.urlcode.cityCode"
                     (selectionChange)="citySelected($event)"
                 ><mat-option>--</mat-option>
                     <mat-option
@@ -50,7 +50,7 @@
                 </mat-select>
             </mat-form-field>
 
-            <mat-form-field appearance="outline" *ngIf="selectedCityCode">
+            <mat-form-field appearance="outline" *ngIf="this.urlV2?.urlcode?.cityCode">
                 <mat-label>Categories</mat-label>
                 <mat-select
                     name="categoryDdl"
@@ -140,7 +140,7 @@
         </div>
     </mat-drawer>
     <div class="example-sidenav-content">
-        <app-home  [urlV2]="urlV2"[url]="url"></app-home>
+        <app-home  [urlV2]="urlV2" ></app-home>
         <button type="button" mat-button (click)="drawer.toggle()">
             Toggle sidenav
         </button>

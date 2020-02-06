@@ -23,6 +23,8 @@ export class AppComponent implements OnInit {
     // selectedCateId: any;
     needPriceFilter: boolean;
     constructor(public ks: KijijiService) {
+        this.urlV2 = new Url();
+
         this.urlV2.baseUrl = 'https://www.kijiji.ca/';
     }
     ngOnInit() {
@@ -30,13 +32,18 @@ export class AppComponent implements OnInit {
         this.ks.getCategoryLevel1().subscribe(cata => (this.categories = cata));
     }
 
-    createUrl() {}
+    createUrl() {
+        this.priceChanged();
+        this.urlV2 = { ...this.urlV2 };
+    }
     citySelected(event: MatSelectChange) {
         console.log(event);
         // select the city by city name
         this.urlV2.city = this.cityNames.names.find(
             ci => ci.citycode === event.value
         );
+
+        this.urlV2 = { ...this.urlV2 };
     }
 
     priceChanged() {
@@ -68,6 +75,7 @@ export class AppComponent implements OnInit {
                 this.categories = cata;
                 console.log('this.categories', this.categories);
             });
+            this.urlV2 = { ...this.urlV2 };
         }
     }
 }
