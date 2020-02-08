@@ -1,23 +1,38 @@
-import { Component, OnInit, Input } from '@angular/core';
+import {
+    Component,
+    OnInit,
+    Input,
+    Output,
+    EventEmitter,
+    OnChanges,
+    SimpleChange,
+    SimpleChanges,
+} from '@angular/core';
 import { House } from 'src/app/models/house';
 import { RentedHousesService } from 'src/app/services/rented-houses.service';
 import { Observable } from 'rxjs';
 import { Page } from 'src/app/models/page';
 import { NotificationService } from 'src/app/services/notification.service';
+import { Circle } from 'src/app/models/circle';
+import { Url } from 'src/app/models/url';
+
 @Component({
     selector: 'app-home',
     templateUrl: './home.component.html',
     styleUrls: ['./home.component.css'],
 })
-export class HomeComponent implements OnInit {
+export class HomeComponent implements OnInit, OnChanges {
     title = 'HouseScraping';
     requestCount = 1;
-    // url = '';
+    isEnteringUrl = false;
     startPage = 1;
     endPage = 3;
     isKeep = true;
+    isDrawingCircle = false;
     scrapedData = new Array<House>();
+    @Output() addressWithLatLng = new EventEmitter<string>();
     @Input() url: string;
+    @Input() urlV2: Url;
     constructor(
         public rh: RentedHousesService,
         public ns: NotificationService
@@ -28,15 +43,25 @@ export class HomeComponent implements OnInit {
             this.scrapedData = JSON.parse(localStorage.getItem('dataSource'));
         }
     }
-    validator() {}
+    ngOnChanges(change: SimpleChanges) {
+        console.log(' this.urlV2', this.urlV2);
 
+        this.setupUrl(this.urlV2);
+
+        // if (change.currentValue !== change.previousValue) {
+
+        // }
+    }
     /**
      * get all the list of rented house
      */
     getRentedHouses() {
         console.log('runing');
         const id = this.requestCount;
-        const page = this.url.match(/page-.*/)[0];
+
+        const page = this.url.match(/page-.*/)
+            ? this.url.match(/page-.*/)[0]
+            : this.url;
         this.ns.completion(id, 'Processing Request', page);
         this.requestCount++;
         this.rh
@@ -60,6 +85,7 @@ export class HomeComponent implements OnInit {
                     console.log(id);
 
                     this.ns.completion(id, 'Completed!', '', true);
+                    this.isDrawingCircle = false;
                     this.scrapedData = [...this.scrapedData];
                 },
                 err => {
@@ -69,6 +95,17 @@ export class HomeComponent implements OnInit {
             );
     }
 
+    circleChanged(circle: Circle) {
+        if (this.url) {
+            const addres = encodeURI(
+                `ll=${circle.lat} ${circle.lng}&address=${circle.address}&radius=${circle.radius}`
+            );
+            this.setupUrl(this.urlV2);
+            this.addFilter(addres);
+
+            // this.addressWithLatLng.emit(addres);
+        }
+    }
     /**
      * On button click
      */
@@ -76,7 +113,42 @@ export class HomeComponent implements OnInit {
         localStorage.removeItem('dataSource');
         this.scrapedData = new Array<House>();
     }
+    private setupUrl(urlV2: Url) {
+        if (urlV2 && urlV2.category && urlV2.urlcode && urlV2.pageNumber) {
+            const searchCode = urlV2.searchItem ? 'k0' : '';
 
+            let urlArray = [
+                `b-${urlV2.category.replace(/-|\s.|,/g, '')}`,
+                urlV2.city.cityurl,
+                urlV2.searchItem,
+                `page-${urlV2.pageNumber}`,
+                `${searchCode}c${urlV2.urlcode.categoryCode}${urlV2.city.citycode}`,
+            ];
+            urlArray = urlArray.filter(this.arrayFilter);
+            this.url = urlV2.baseUrl + urlArray.join('/');
+            console.log('urlArray', urlArray);
+            // this.url = `${urlV2.baseUrl}b-${urlV2.category.replace(
+            //     /-|\s./g,
+            //     ''
+            // )}/${urlV2.city.cityurl}/page-${urlV2.pageNumber}/${
+            //     urlV2.searchItem
+            // }/c${urlV2.urlcode.categoryCode}${urlV2.city.citycode}`;
+        }
+
+        this.addFilter(urlV2.priceFilter);
+    }
+
+    arrayFilter(val: string): boolean {
+        if (val && val !== '') {
+            return true;
+        }
+    }
+    addFilter(arg0: string) {
+        if (arg0) {
+            const va = this.url.includes('?') ? '&' : '?';
+            this.url = this.url + va + arg0;
+        }
+    }
     /**
      * on Button click
      * @param page

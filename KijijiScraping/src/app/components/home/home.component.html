@@ -2,68 +2,38 @@
     <div class="container">
         <form #rentHomes="ngForm" class="example-form">
             <div class="row">
-                <div class="col-lg-10">
+                <div class="urlenterbar col-lg-10">
                     <div class="input-group mb-3">
                         <div class="input-group-prepend">
                             <span class="input-group-text" id="basic-addon3"
-                                >URL:</span
+                                ><mat-icon>http</mat-icon></span
                             >
                         </div>
                         <input
-
+                        matTooltip="Paste url from kijiji"
 
                             type="text"
                             class="form-control"
                             #urlBox="ngModel"
+                            [disabled]="!isEnteringUrl"
                             [(ngModel)]="url"
                             required
                             appUrlValidator
                             name="urlBox"
                             aria-describedby="basic-addon3"
                         />
-                    </div>
-                </div>
-            </div>
-            <div class="row">
-
-                <div class="col-lg-3">
-                    <div class="input-group mb-3">
                         <div class="input-group-prepend">
-                            <span class="input-group-text" id="basic-addon3"
-                                >Keep Last result:</span
+                            <button
+                                name="runbutton"
+                                [disabled]="!this.url"
+                                class="btn btn-primary"
+                                color="primary"
+                                (click)="getRentedHouses()"
                             >
+                                Run
+                            </button>
                         </div>
-                        <input
-                            type="checkbox"
-                            class="form-control"
-                            #urlBox="ngModel"
-                            [(ngModel)]="isKeep"
-                            name="keepLogs"
-                            aria-describedby="basic-addon3"
-                        />
                     </div>
-                </div>
-                <!-- <a style="float: right;" href="#">Save in Memory</a>|
-              <a  style="float: right;"href="#">Remove from Memory</a>|
-              <a href="#">Open from Memory</a> -->
-                <div class="col-lg-2">
-                    <button
-                    [disabled]="!this.url"
-                        mat-raised-button
-                        color="primary"
-                        (click)="getRentedHouses()"
-                    >
-                        Run
-                    </button>
-                </div>
-                <div class="col-lg-2">
-                    <button
-                        mat-raised-button
-                        color="primary"
-                        (click)="DeleteHistoryData()"
-                    >
-                        Delete History
-                    </button>
                 </div>
             </div>
             <div
@@ -77,14 +47,76 @@
                     Please enter the correct url.
                 </div>
             </div>
+            <br />
+            <div class="row">
+                <div class="col-lg-7">
+                    <!-- /empty space for design purpose -->
+                </div>
+                <div
+                    class=" col-md-3"
+                    aria-label="Button group with nested dropdown"
+                >
+                    <button
+                        color="primary"
+                        mat-raised-button
+                        [matMenuTriggerFor]="menu"
+                    >
+                        <mat-icon>star</mat-icon>
+                        Advance Serach Features
+                        <mat-icon>keyboard_arrow_down</mat-icon>
+                    </button>
+                </div>
+
+                <mat-menu #menu="matMenu">
+                    <button
+                        matTooltip="After creating search result in kijiji you need to copy the url and past it here"
+                        mat-menu-item
+                        name="isEnteringUrl"
+                        (click)="isEnteringUrl = !isEnteringUrl"
+                    >
+                        <mat-icon>text_fields</mat-icon>
+                        Enter url from kijiji
+                    </button>
+                    <button
+                        matTooltip="Select area by circle to get the result inside the circle only"
+                        mat-menu-item
+                        (click)="isDrawingCircle = !isDrawingCircle"
+                    >
+                        <mat-icon> room</mat-icon> Draw Circle
+                    </button>
+                    <mat-checkbox
+                        labelPosition="before"
+                        class="mat-menu-item"
+                        role="menuitemcheckbox"
+                        name="isKeep"
+                        [(ngModel)]="isKeep"
+                    >
+                        <mat-icon>save</mat-icon>Keep Last result</mat-checkbox
+                    >
+                    <button
+                        name="deleteButton"
+                        mat-menu-item
+                        color="warn"
+                        (click)="DeleteHistoryData()"
+                    >
+                        <mat-icon>delete_forever</mat-icon>
+                        Delete History
+                    </button>
+                </mat-menu>
+            </div>
         </form>
         <!-- <mat-progress-bar mode="buffer"></mat-progress-bar> -->
     </div>
 </div>
+
 <!-- section 2 -->
 <div class="container text-center">
     <div class="col-lg-12" style="padding-bottom:10px">
-        <app-mb-map [data]="scrapedData"></app-mb-map>
+        <app-mb-map
+            [drawCircle]="isDrawingCircle"
+            (circleChanged)="circleChanged($event)"
+            [data]="scrapedData"
+        ></app-mb-map>
     </div>
     <!-- <button mat-raised-button color="primary">Download CSV</button> -->
 </div>

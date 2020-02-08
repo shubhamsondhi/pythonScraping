@@ -13,18 +13,44 @@
         </div>
     </div>
 </header>
-<mat-drawer-container class="example-container" autosize>
-    <mat-drawer #drawer class="col-md-2 example-sidenav" opened mode="side">
+<mat-sidenav-container class="example-container" autosize>
+    <mat-sidenav
+        position="start"
+        #drawer
+        [class.is-mobile]="mobileQuery.matches"
+        class="col-md-2 example-sidenav"
+        [opened]="!mobileQuery.matches"
+        [mode]="mobileQuery.matches ? 'over' : 'side'"
+    >
+        <h2><mat-icon>perm_data_setting</mat-icon> Tools to create URL</h2>
+        <br />
         <div class="filterInputs">
-            <mat-form-field appearance="outline">
+            <mat-form-field class="example-full-width" appearance="outline">
+                <mat-label>
+                    <mat-icon> find_replace</mat-icon> Search Item</mat-label
+                >
                 <input
+                    (change)="createUrl()"
+                    matTooltip="Enter here to search particular item"
+                    matInput
+                    placeholder="Search"
+                    [(ngModel)]="urlV2.searchItem"
+                />
+            </mat-form-field>
+
+            <mat-form-field appearance="outline">
+                <mat-label>
+                    <mat-icon> description</mat-icon> Page number</mat-label
+                >
+                <input
+                    matTooltip="Select page number"
                     min="1"
                     (change)="createUrl()"
                     type="number"
                     matInput
                     placeholder="Page number"
                     #urlBox="ngModel"
-                    [(ngModel)]="startPage"
+                    [(ngModel)]="urlV2.pageNumber"
                     required
                     name="startbox"
                     aria-describedby="basic-addon3"
@@ -32,13 +58,14 @@
             </mat-form-field>
 
             <mat-form-field appearance="outline">
-                <mat-label>City Name</mat-label>
+                <mat-label><mat-icon>public</mat-icon> City Name</mat-label>
                 <mat-select
+                    matTooltip="Select City to search items from"
                     name="cityDdl"
                     #city
-                    [(ngModel)]="selectedCityCode"
+                    [(ngModel)]="this.urlV2?.urlcode.cityCode"
                     (selectionChange)="citySelected($event)"
-                ><mat-option>--</mat-option>
+                    ><mat-option>--</mat-option>
                     <mat-option
                         *ngFor="let items of cityNames.names"
                         [value]="items.citycode"
@@ -48,14 +75,17 @@
                 </mat-select>
             </mat-form-field>
 
-            <mat-form-field appearance="outline" *ngIf="selectedCityCode">
-                <mat-label>Categories</mat-label>
+            <mat-form-field
+                appearance="outline"
+                *ngIf="this.urlV2?.urlcode?.cityCode"
+            >
+                <mat-label><mat-icon>category</mat-icon> Categories</mat-label>
                 <mat-select
                     name="categoryDdl"
                     #category
                     [(ngModel)]="selectedcateGoryIdLevel1"
                     (selectionChange)="categoryChanged($event)"
-                ><mat-option>--</mat-option>
+                    ><mat-option>--</mat-option>
                     <mat-option
                         *ngFor="let items of categories?.level1?.items"
                         [value]="items.categoryId"
@@ -74,7 +104,7 @@
                     name="categorySubDdl"
                     [(ngModel)]="selectedcateGoryIdLevel2"
                     (selectionChange)="categoryChanged($event)"
-                ><mat-option>--</mat-option>
+                    ><mat-option>--</mat-option>
                     <mat-option
                         *ngFor="let items of categories?.level2?.items"
                         [value]="items.categoryId"
@@ -120,6 +150,7 @@
                     title="from"
                     class="placeholder-text"
                 />
+                <span matPrefix>$&nbsp;</span>
             </mat-form-field>
             -
             <mat-form-field class="price" appearance="outline">
@@ -134,13 +165,16 @@
                     title="to"
                     class="placeholder-text"
                 />
+                <span matPrefix>$&nbsp;</span>
             </mat-form-field>
         </div>
-    </mat-drawer>
-    <div class="example-sidenav-content">
-        <app-home [url]="url"></app-home>
-        <button type="button" mat-button (click)="drawer.toggle()">
-            Toggle sidenav
-        </button>
-    </div>
-</mat-drawer-container>
+    </mat-sidenav>
+    <mat-sidenav-content>
+        <div class="example-sidenav-content">
+            <app-home [urlV2]="urlV2"></app-home>
+            <button type="button" mat-button (click)="drawer.toggle()">
+                <mat-icon>trending_flat</mat-icon>
+            </button>
+        </div>
+    </mat-sidenav-content>
+</mat-sidenav-container>

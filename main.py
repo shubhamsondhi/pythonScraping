@@ -8,7 +8,7 @@ from flask_cors import CORS
 # post_parser.add_argument('url')
 kijijiUrl = re.compile(r"https://www.kijiji.ca/.*")
 
-app = Flask(__name__, static_url_path='/', static_folder='templates' )
+app = Flask(__name__ )
 CORS(app)
 # api = Api(app)
 
@@ -19,9 +19,9 @@ regex = r"(page-.)"
 # items = rRooms.main(url1)
 # rRooms.addInformation("Short term Room",items)
 
-@app.route('/')
-def root():
-    return redirect("index.html")
+# @app.route('/')
+# def root():
+#     return redirect("index.html")
 
 @app.route('/rentedHouses', methods=['POST'])
 def rentedHouses():

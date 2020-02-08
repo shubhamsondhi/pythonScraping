@@ -4,15 +4,19 @@
 }
 .example-sidenav{
 
-  padding-top: 100px;
+  padding-top: 40px;
   padding-left: 20px;
+  min-width: 350px
 }
 .matformfield{
 
   /* width: 100%; */
 
 }
+.is-mobile{
+  width: 50%;
 
+}
 .price{
 margin-right: 10px;
 margin-left: 10px;
