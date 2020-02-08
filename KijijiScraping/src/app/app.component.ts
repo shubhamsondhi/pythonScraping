@@ -1,15 +1,19 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy, ChangeDetectorRef } from '@angular/core';
 import { KijijiService } from './services/kijiji.service';
 import { Category, CityNamesForOntario } from './models/category';
 import { MatSelectChange } from '@angular/material';
 import { Url } from './models/url';
-import {MatTreeFlatDataSource, MatTreeFlattener} from '@angular/material/tree';
+import {
+    MatTreeFlatDataSource,
+    MatTreeFlattener,
+} from '@angular/material/tree';
+import { MediaMatcher } from '@angular/cdk/layout';
 @Component({
     selector: 'app-root',
     templateUrl: './app.component.html',
     styleUrls: ['./app.component.css'],
 })
-export class AppComponent implements OnInit {
+export class AppComponent implements OnInit, OnDestroy {
     categories: Category;
     selectedcateGoryIdLevel1: number;
     selectedcateGoryIdLevel2: number;
@@ -21,17 +25,28 @@ export class AppComponent implements OnInit {
     maxPrice = '';
     // selectedCateId: any;
     needPriceFilter: boolean;
+    mobileQuery: MediaQueryList;
 
-    constructor(public ks: KijijiService) {
+    private _mobileQueryListener: () => void;
+    constructor(
+        public ks: KijijiService,
+        media: MediaMatcher,
+        changeDetectorRef: ChangeDetectorRef
+    ) {
         this.urlV2 = new Url();
 
         this.urlV2.baseUrl = 'https://www.kijiji.ca/';
+        this.mobileQuery = media.matchMedia('(max-width: 600px)');
+        this._mobileQueryListener = () => changeDetectorRef.detectChanges();
+        this.mobileQuery.addListener(this._mobileQueryListener);
     }
     ngOnInit() {
         // this.url = this.baseUrl;
         this.ks.getCategoryLevel1().subscribe(cata => (this.categories = cata));
     }
-
+    ngOnDestroy(): void {
+        this.mobileQuery.removeListener(this._mobileQueryListener);
+    }
     createUrl() {
         this.priceChanged();
         this.urlV2 = { ...this.urlV2 };

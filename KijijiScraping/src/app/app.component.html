@@ -13,15 +13,24 @@
         </div>
     </div>
 </header>
-<mat-drawer-container class="example-container" autosize>
-    <mat-drawer #drawer class="col-md-2 example-sidenav" opened mode="side">
-        <h2>Tools to create URL</h2>
+<mat-sidenav-container class="example-container" autosize>
+    <mat-sidenav
+        position="start"
+        #drawer
+        [class.is-mobile]="mobileQuery.matches"
+        class="col-md-2 example-sidenav"
+        [opened]="!mobileQuery.matches"
+        [mode]="mobileQuery.matches ? 'over' : 'side'"
+    >
+        <h2><mat-icon>perm_data_setting</mat-icon> Tools to create URL</h2>
         <br />
         <div class="filterInputs">
             <mat-form-field class="example-full-width" appearance="outline">
-                <mat-label  >Search Item</mat-label>
+                <mat-label>
+                    <mat-icon> find_replace</mat-icon> Search Item</mat-label
+                >
                 <input
-                  (change) ="createUrl()"
+                    (change)="createUrl()"
                     matTooltip="Enter here to search particular item"
                     matInput
                     placeholder="Search"
@@ -30,7 +39,9 @@
             </mat-form-field>
 
             <mat-form-field appearance="outline">
-                <mat-label>Page number</mat-label>
+                <mat-label>
+                    <mat-icon> description</mat-icon> Page number</mat-label
+                >
                 <input
                     matTooltip="Select page number"
                     min="1"
@@ -47,7 +58,7 @@
             </mat-form-field>
 
             <mat-form-field appearance="outline">
-                <mat-label>City Name</mat-label>
+                <mat-label><mat-icon>public</mat-icon> City Name</mat-label>
                 <mat-select
                     matTooltip="Select City to search items from"
                     name="cityDdl"
@@ -68,7 +79,7 @@
                 appearance="outline"
                 *ngIf="this.urlV2?.urlcode?.cityCode"
             >
-                <mat-label>Categories</mat-label>
+                <mat-label><mat-icon>category</mat-icon> Categories</mat-label>
                 <mat-select
                     name="categoryDdl"
                     #category
@@ -157,10 +168,13 @@
                 <span matPrefix>$&nbsp;</span>
             </mat-form-field>
         </div>
-    </mat-drawer>
-    <div class="example-sidenav-content">
-        <app-home [urlV2]="urlV2"></app-home>
-        <button type="button" mat-button (click)="drawer.toggle()">
-          <mat-icon>menu</mat-icon> </button>
-    </div>
-</mat-drawer-container>
+    </mat-sidenav>
+    <mat-sidenav-content>
+        <div class="example-sidenav-content">
+            <app-home [urlV2]="urlV2"></app-home>
+            <button type="button" mat-button (click)="drawer.toggle()">
+                <mat-icon>trending_flat</mat-icon>
+            </button>
+        </div>
+    </mat-sidenav-content>
+</mat-sidenav-container>

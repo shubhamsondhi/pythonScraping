@@ -21,7 +21,7 @@ regex = r"(page-.)"
 
 @app.route('/')
 def root():
-    return redirect("index1.html")
+    return redirect("index.html")
 
 @app.route('/rentedHouses', methods=['POST'])
 def rentedHouses():
