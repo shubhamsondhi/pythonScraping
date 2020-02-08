@@ -24,7 +24,7 @@ import { Url } from 'src/app/models/url';
 export class HomeComponent implements OnInit, OnChanges {
     title = 'HouseScraping';
     requestCount = 1;
-    // url = '';
+    isEnteringUrl = false;
     startPage = 1;
     endPage = 3;
     isKeep = true;
@@ -115,17 +115,32 @@ export class HomeComponent implements OnInit, OnChanges {
     }
     private setupUrl(urlV2: Url) {
         if (urlV2 && urlV2.category && urlV2.urlcode && urlV2.pageNumber) {
-            this.url = `${urlV2.baseUrl}b-${urlV2.category.replace(
-                /-|\s./g,
-                ''
-            )}/${urlV2.city.cityurl}/page-${urlV2.pageNumber}/c${
-                urlV2.urlcode.categoryCode
-            }${urlV2.city.citycode}`;
+            let urlArray = [
+                `b-${urlV2.category.replace(/-|\s.|,/g, '')}`,
+                urlV2.city.cityurl,
+                `page-${urlV2.pageNumber}`,
+                urlV2.searchItem,
+                `c${urlV2.urlcode.categoryCode}${urlV2.city.citycode}`,
+            ];
+            urlArray = urlArray.filter(this.arrayFilter);
+            this.url = urlV2.baseUrl + urlArray.join('/');
+            console.log('urlArray', urlArray);
+            // this.url = `${urlV2.baseUrl}b-${urlV2.category.replace(
+            //     /-|\s./g,
+            //     ''
+            // )}/${urlV2.city.cityurl}/page-${urlV2.pageNumber}/${
+            //     urlV2.searchItem
+            // }/c${urlV2.urlcode.categoryCode}${urlV2.city.citycode}`;
         }
 
         this.addFilter(urlV2.priceFilter);
     }
 
+    arrayFilter(val: string): boolean {
+        if (val && val !== '') {
+            return true;
+        }
+    }
     addFilter(arg0: string) {
         if (arg0) {
             const va = this.url.includes('?') ? '&' : '?';

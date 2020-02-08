@@ -116,7 +116,7 @@ def getInformation(items):
         soup2 = BeautifulSoup(resp[i].text, 'lxml') 
         # print([(x[0].find('span')) for x in findPrice(soup2)])
         val['price']= findPrice(soup2)
-        val['address']= [x.text for x in findAddress(soup2)][0]
+        val['address']= [x.text if x is not None else 'No address found' for x in findAddress(soup2)][0]
         val['discription']= [x[1].text for x in findDiscription(soup2)][0]
         val['images']= [x for x in findImages(soup2)][0] 
         val['date']=findDate(soup2)

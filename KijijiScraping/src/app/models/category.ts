@@ -7,26 +7,12 @@ export class Category {
 
 interface Level2 {
     postValue: number;
-    items: Item2[];
+    items: Item[];
 }
 
 interface Level3 {
     postValue?: any;
-    items: Item2[];
-}
-
-interface Item2 {
-    categoryId: number;
-    onHomepage: boolean;
-    subTitle?: any;
-    pseudoCategory: boolean;
-    leaf: boolean;
-    sortOrder: number;
-    children: any[];
-    newCategory: boolean;
-    admarktCategory: boolean;
-    name: string;
-    url?: any;
+    items: Item[];
 }
 
 interface Level1 {

@@ -13,6 +13,7 @@
                             type="text"
                             class="form-control"
                             #urlBox="ngModel"
+                            [disabled]="!isEnteringUrl"
                             [(ngModel)]="url"
                             required
                             appUrlValidator
@@ -33,6 +34,17 @@
                     </button>
                 </div>
             </div>
+            <div
+                *ngIf="urlBox.invalid && (urlBox.dirty || urlBox.touched)"
+                class="alert alert-danger"
+            >
+                <div *ngIf="urlBox.errors['required']">
+                    URL is required.
+                </div>
+                <div *ngIf="urlBox.errors['isUrlValid']">
+                    Please enter the correct url.
+                </div>
+            </div>
             <br />
             <div class="row">
                 <div class="col-lg-1">
@@ -46,7 +58,7 @@
 
                 <div class="col-lg-2">
                     <button
-                    name="deleteButton"
+                        name="deleteButton"
                         mat-raised-button
                         color="primary"
                         (click)="DeleteHistoryData()"
@@ -54,23 +66,27 @@
                         Delete History
                     </button>
                 </div>
+                <button mat-button [matMenuTriggerFor]="menu">
+                    Advance Serach Features
+                </button>
+                <mat-menu #menu="matMenu">
+                    <button
+                        matTooltip="After creating search result in kijiji you need to copy the url and past it here"
+                        mat-menu-item
+                        name="isEnteringUrl"
+                        (click)="isEnteringUrl=!isEnteringUrl"
 
-                <div class="col-lg-2">
-                    <mat-checkbox name="drawBox" [(ngModel)]="isDrawingCircle"
-                        >Draw Circle</mat-checkbox
                     >
-                </div>
-            </div>
-            <div
-                *ngIf="urlBox.invalid && (urlBox.dirty || urlBox.touched)"
-                class="alert alert-danger"
-            >
-                <div *ngIf="urlBox.errors['required']">
-                    URL is required.
-                </div>
-                <div *ngIf="urlBox.errors['isUrlValid']">
-                    Please enter the correct url.
-                </div>
+                        Enter url from kijiji
+                    </button>
+                    <button
+                        matTooltip="Select area by circle to get the result inside the circle only"
+                        mat-menu-item
+                        (click)="isDrawingCircle=!isDrawingCircle"
+                    >
+                        Draw Circle
+                    </button>
+                </mat-menu>
             </div>
         </form>
         <!-- <mat-progress-bar mode="buffer"></mat-progress-bar> -->

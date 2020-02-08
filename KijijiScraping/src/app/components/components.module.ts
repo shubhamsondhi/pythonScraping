@@ -8,6 +8,8 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { SharedModule } from '../Shared/shared.module';
 import { UrlValidatorDirective } from '../Shared/url-validator.directive';
 import {MatCheckboxModule} from '@angular/material/checkbox';
+import {MatTooltipModule} from '@angular/material/tooltip';
+import {MatMenuModule} from '@angular/material/menu';
 @NgModule({
     imports: [
         CommonModule,
@@ -16,8 +18,10 @@ import {MatCheckboxModule} from '@angular/material/checkbox';
         MatProgressBarModule,
         MatButtonModule,
         MatCheckboxModule,
+        MatTooltipModule,
         BrowserAnimationsModule,
         SharedModule,
+        MatMenuModule,
     ],
     exports: [HomeComponent, UrlValidatorDirective],
     declarations: [HomeComponent],

@@ -3,7 +3,7 @@ import { KijijiService } from './services/kijiji.service';
 import { Category, CityNamesForOntario } from './models/category';
 import { MatSelectChange } from '@angular/material';
 import { Url } from './models/url';
-
+import {MatTreeFlatDataSource, MatTreeFlattener} from '@angular/material/tree';
 @Component({
     selector: 'app-root',
     templateUrl: './app.component.html',
@@ -14,7 +14,6 @@ export class AppComponent implements OnInit {
     selectedcateGoryIdLevel1: number;
     selectedcateGoryIdLevel2: number;
     selectedcateGoryIdLevel3: number;
-    selectedCityCode: string;
     cityNames = new CityNamesForOntario();
     url: string;
     urlV2: Url;
@@ -22,6 +21,7 @@ export class AppComponent implements OnInit {
     maxPrice = '';
     // selectedCateId: any;
     needPriceFilter: boolean;
+
     constructor(public ks: KijijiService) {
         this.urlV2 = new Url();
 
