@@ -28,7 +28,7 @@ export class HomeComponent implements OnInit, OnChanges {
     startPage = 1;
     endPage = 3;
     isKeep = true;
-    isDrawingCircle: false;
+    isDrawingCircle = false;
     scrapedData = new Array<House>();
     @Output() addressWithLatLng = new EventEmitter<string>();
     @Input() url: string;
@@ -115,12 +115,14 @@ export class HomeComponent implements OnInit, OnChanges {
     }
     private setupUrl(urlV2: Url) {
         if (urlV2 && urlV2.category && urlV2.urlcode && urlV2.pageNumber) {
+            const searchCode = urlV2.searchItem ? 'k0' : '';
+
             let urlArray = [
                 `b-${urlV2.category.replace(/-|\s.|,/g, '')}`,
                 urlV2.city.cityurl,
-                `page-${urlV2.pageNumber}`,
                 urlV2.searchItem,
-                `c${urlV2.urlcode.categoryCode}${urlV2.city.citycode}`,
+                `page-${urlV2.pageNumber}`,
+                `${searchCode}c${urlV2.urlcode.categoryCode}${urlV2.city.citycode}`,
             ];
             urlArray = urlArray.filter(this.arrayFilter);
             this.url = urlV2.baseUrl + urlArray.join('/');
